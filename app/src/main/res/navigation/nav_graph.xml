@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/timesFragment">
+
+    <fragment
+        android:id="@+id/timesFragment"
+        android:name="com.example.futebolamador.ui.times.TimesFragment"
+        android:label="Times">
+        <action
+            android:id="@+id/action_timesFragment_to_timeDetalheFragment"
+            app:destination="@id/timeDetalheFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/timeDetalheFragment"
+        android:name="com.example.futebolamador.ui.times.TimeDetalheFragment"
+        android:label="Cadastrar Time">
+        <argument
+            android:name="timeId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+
+</navigation>
