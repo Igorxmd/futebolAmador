@@ -16,7 +16,8 @@ class TimeDao(context: Context) {
                     id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                     nome = cursor.getString(cursor.getColumnIndexOrThrow("nome")),
                     cidade = cursor.getString(cursor.getColumnIndexOrThrow("cidade")),
-                    corPrimaria = cursor.getString(cursor.getColumnIndexOrThrow("corPrimaria"))
+                    dataFundacao = cursor.getString(cursor.getColumnIndexOrThrow("dataFundacao")),
+                    brasaoUri = cursor.getString(cursor.getColumnIndexOrThrow("brasaoUri"))
                 )
             )
         }
@@ -31,7 +32,8 @@ class TimeDao(context: Context) {
                 id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                 nome = cursor.getString(cursor.getColumnIndexOrThrow("nome")),
                 cidade = cursor.getString(cursor.getColumnIndexOrThrow("cidade")),
-                corPrimaria = cursor.getString(cursor.getColumnIndexOrThrow("corPrimaria"))
+                dataFundacao = cursor.getString(cursor.getColumnIndexOrThrow("dataFundacao")),
+                brasaoUri = cursor.getString(cursor.getColumnIndexOrThrow("brasaoUri"))
             ).also { cursor.close() }
         } else null
     }
@@ -40,7 +42,8 @@ class TimeDao(context: Context) {
         val values = ContentValues().apply {
             put("nome", time.nome)
             put("cidade", time.cidade)
-            put("corPrimaria", time.corPrimaria)
+            put("dataFundacao", time.dataFundacao)
+            put("brasaoUri", time.brasaoUri)
         }
         db.insert("times", null, values)
     }
@@ -49,7 +52,8 @@ class TimeDao(context: Context) {
         val values = ContentValues().apply {
             put("nome", time.nome)
             put("cidade", time.cidade)
-            put("corPrimaria", time.corPrimaria)
+            put("dataFundacao", time.dataFundacao)
+            put("brasaoUri", time.brasaoUri)
         }
         db.update("times", values, "id=?", arrayOf(time.id.toString()))
     }

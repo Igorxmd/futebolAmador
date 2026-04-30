@@ -1,6 +1,6 @@
 package com.example.futebolamador.ui.times
 
-import android.graphics.Color
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +17,10 @@ class TimeAdapter(
 ) : RecyclerView.Adapter<TimeAdapter.TimeViewHolder>() {
 
     inner class TimeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val corView: ImageView = view.findViewById(R.id.imgCor)
+        val imgBrasao: ImageView = view.findViewById(R.id.imgBrasao)
         val nomeText: TextView = view.findViewById(R.id.txtNome)
         val cidadeText: TextView = view.findViewById(R.id.txtCidade)
+        val fundacaoText: TextView = view.findViewById(R.id.txtFundacao)
         val btnEditar: View = view.findViewById(R.id.btnEditar)
         val btnDeletar: View = view.findViewById(R.id.btnDeletar)
     }
@@ -32,15 +33,21 @@ class TimeAdapter(
 
     override fun onBindViewHolder(holder: TimeViewHolder, position: Int) {
         val time = times[position]
-
         holder.nomeText.text = time.nome
         holder.cidadeText.text = time.cidade
+        holder.fundacaoText.text = if (time.dataFundacao.isNotEmpty())
+            "Fundado em: ${time.dataFundacao}" else ""
 
-        // Aplica a cor do time no círculo
-        try {
-            holder.corView.setColorFilter(Color.parseColor(time.corPrimaria))
-        } catch (e: Exception) {
-            holder.corView.setColorFilter(Color.parseColor("#1E88E5"))
+        // Mostra o brasão se tiver, senão mostra ícone padrão
+        if (time.brasaoUri.isNotEmpty()) {
+            try {
+                holder.imgBrasao.setImageURI(Uri.parse(time.brasaoUri))
+            } catch (e: Exception) {
+                holder.imgBrasao.setImageResource(android.R.drawable.ic_menu_gallery)
+            }
+        } else {
+            // Sem brasão: mostra fundo cinza com ícone discreto
+            holder.imgBrasao.setImageResource(android.R.drawable.ic_menu_gallery)
         }
 
         holder.btnEditar.setOnClickListener { onEditar(time) }
@@ -49,7 +56,6 @@ class TimeAdapter(
 
     override fun getItemCount() = times.size
 
-    // Atualiza a lista e redesenha o RecyclerView
     fun atualizarLista(novaLista: List<TimeEntity>) {
         times = novaLista
         notifyDataSetChanged()

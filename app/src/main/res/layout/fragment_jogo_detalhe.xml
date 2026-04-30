@@ -11,13 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbarJogo"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:navigationContentDescription="Voltar"
-            app:title="Cadastrar Time"
+            app:title="Agendar Jogo"
             app:titleTextColor="#FFFFFF" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -46,85 +46,62 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Dados do Time"
+                        android:text="Dados do Jogo"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="#212121"
                         android:layout_marginBottom="16dp" />
 
-                    <ImageView
-                        android:id="@+id/imgBrasaoPreview"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
-                        android:layout_gravity="center"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_circle"
-                        android:layout_marginBottom="8dp"
-                        android:contentDescription="Brasão do time" />
-
-                    <Button
-                        android:id="@+id/btnSelecionarBrasao"
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Selecionar Brasão (opcional)"
-                        android:layout_marginBottom="16dp"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
-
-                    <com.google.android.material.textfield.TextInputLayout
+                        android:text="Time Mandante"
+                        android:textColor="#757575"
+                        android:textSize="13sp"/>
+                    <Spinner
+                        android:id="@+id/spinnerMandante"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nome do Time"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_marginBottom="12dp">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editNome"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textCapWords" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginBottom="12dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cidade"
+                        android:text="Time Visitante"
                         android:textColor="#757575"
-                        android:textSize="13sp"
-                        android:layout_marginBottom="4dp"/>
-
+                        android:textSize="13sp"/>
                     <Spinner
-                        android:id="@+id/spinnerCidade"
+                        android:id="@+id/spinnerVisitante"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"/>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/layoutOutraCidade"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Digite a cidade"
+                        android:hint="Data (DD/MM/AAAA)"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_marginBottom="12dp"
-                        android:visibility="gone">
+                        android:layout_marginBottom="12dp">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editOutraCidade"
+                            android:id="@+id/editData"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textCapWords" />
+                            android:inputType="number"
+                            android:maxLength="10"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Data de Fundação (opcional)"
+                        android:hint="Hora (HH:MM)"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_marginBottom="8dp">
+                        android:layout_marginBottom="12dp">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editDataFundacao"
+                            android:id="@+id/editHora"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
-                            android:maxLength="10"/>
+                            android:maxLength="5"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -137,7 +114,7 @@
                 android:layout_marginTop="16dp">
 
                 <Button
-                    android:id="@+id/btnCancelar"
+                    android:id="@+id/btnCancelarJogo"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -146,7 +123,7 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
                 <Button
-                    android:id="@+id/btnSalvar"
+                    android:id="@+id/btnSalvarJogo"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

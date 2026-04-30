@@ -4,5 +4,6 @@ data class TimeEntity(
     val id: Int = 0,
     val nome: String,
     val cidade: String,
-    val corPrimaria: String = "#1E88E5"
+    val dataFundacao: String = "",
+    val brasaoUri: String = ""
 )

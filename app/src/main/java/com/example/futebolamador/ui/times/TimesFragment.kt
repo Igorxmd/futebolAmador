@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.futebolamador.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class TimesFragment : Fragment() {
@@ -39,9 +40,7 @@ class TimesFragment : Fragment() {
                 AlertDialog.Builder(requireContext())
                     .setTitle("Remover Time")
                     .setMessage("Deseja remover ${time.nome}?")
-                    .setPositiveButton("Sim") { _, _ ->
-                        viewModel.deletar(time)
-                    }
+                    .setPositiveButton("Sim") { _, _ -> viewModel.deletar(time) }
                     .setNegativeButton("Cancelar", null)
                     .show()
             }
@@ -63,9 +62,24 @@ class TimesFragment : Fragment() {
                 R.id.action_timesFragment_to_timeDetalheFragment, bundle
             )
         }
+
+        // Navegação inferior
+        view.findViewById<BottomNavigationView>(R.id.bottomNav).apply {
+            selectedItemId = R.id.nav_times
+            setOnItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.nav_jogos -> {
+                        findNavController().navigate(
+                            R.id.action_timesFragment_to_jogosFragment
+                        )
+                        true
+                    }
+                    else -> true
+                }
+            }
+        }
     }
 
-    // Recarrega a lista ao voltar para a tela
     override fun onResume() {
         super.onResume()
         viewModel.carregarTodos()

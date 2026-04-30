@@ -15,15 +15,17 @@
         android:padding="12dp"
         android:gravity="center_vertical">
 
-        <!-- Círculo colorido representando o time -->
+        <!-- Brasão do time -->
         <ImageView
-            android:id="@+id/imgCor"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_circle"
-            android:contentDescription="Cor do time" />
+            android:id="@+id/imgBrasao"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Brasão do time"
+            android:background="#EEEEEE"
+            android:padding="4dp" />
 
-        <!-- Nome e cidade do time -->
+        <!-- Infos do time -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -45,6 +47,13 @@
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
                 android:textColor="#757575" />
+
+            <TextView
+                android:id="@+id/txtFundacao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#9E9E9E" />
 
         </LinearLayout>
 
