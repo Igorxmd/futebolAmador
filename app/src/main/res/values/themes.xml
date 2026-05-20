@@ -1,9 +1,17 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.FutebolAmador" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Base.Theme.FutebolAmador" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">#1A3A1A</item>
+        <item name="colorPrimaryVariant">#0D2B0D</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#0D47A1</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="android:colorBackground">#1A3A1A</item>
+        <item name="colorSurface">#1E4620</item>
+        <item name="colorOnSurface">#FFFFFF</item>
+        <item name="android:statusBarColor">#0D2B0D</item>
+        <item name="android:navigationBarColor">#0D2B0D</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
-
-    <style name="Theme.FutebolAmador" parent="Base.Theme.FutebolAmador" />
+    <style name="Theme.FutebolAmador" parent="Base.Theme.FutebolAmador"/>
 </resources>

@@ -1,5 +1,7 @@
 package com.example.futebolamador.ui.jogos
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,13 +9,16 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.futebolamador.R
+import com.example.futebolamador.auth.SessaoManager
 import com.example.futebolamador.data.JogoEntity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,46 +36,83 @@ class JogosFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = JogoAdapter(
-            onEditar = { jogo ->
-                val bundle = Bundle()
-                bundle.putInt("jogoId", jogo.id)
-                findNavController().navigate(
-                    R.id.action_jogosFragment_to_jogoDetalheFragment, bundle)
-            },
-            onDeletar = { jogo ->
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Remover Jogo")
-                    .setMessage("${jogo.timeMandanteNome} x ${jogo.timeVisitanteNome}")
-                    .setPositiveButton("Sim") { _, _ -> viewModel.deletar(jogo) }
-                    .setNegativeButton("Cancelar", null)
-                    .show()
-            },
-            onIniciar = { jogo -> tratarIniciar(jogo) },
-            onIntervalo = { jogo -> tratarIntervalo(jogo) },
-            onFinalizar = { jogo -> tratarFinalizar(jogo) },
-            onGolMandante = { jogo, delta ->
-                val novo = (jogo.placarMandante + delta).coerceAtLeast(0)
-                viewModel.atualizar(jogo.copy(placarMandante = novo))
-            },
-            onGolVisitante = { jogo, delta ->
-                val novo = (jogo.placarVisitante + delta).coerceAtLeast(0)
-                viewModel.atualizar(jogo.copy(placarVisitante = novo))
+        val fab = view.findViewById<FloatingActionButton>(R.id.fabAdicionarJogo)
+
+        val layoutVazio = view.findViewById<View>(R.id.layoutVazioJogos)
+        val recycler = view.findViewById<RecyclerView>(R.id.recyclerJogos)
+        val swipeRefresh = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshJogos)
+        swipeRefresh.setColorSchemeColors(
+            resources.getColor(android.R.color.holo_green_dark, null))
+
+        swipeRefresh.setOnRefreshListener {
+            viewModel.carregarTodos()
+        }
+
+        lifecycleScope.launch {
+            val perfil = SessaoManager.perfilAtual()
+            val podeEditar = perfil == "admin" || perfil == "comissao"
+
+            // Carrega mapa de brasões dos times
+            val times = com.example.futebolamador.repository.TimeRepository().getTodos()
+            val brasoes = times.associate { it.id to it.brasaoUri }
+
+            adapter = JogoAdapter(
+                // ... callbacks existentes ...
+                podeEditar = podeEditar,
+                brasoes = brasoes
+            )
+        }
+
+        lifecycleScope.launch {
+            val perfil = SessaoManager.perfilAtual()
+            val podeEditar = perfil == "admin" || perfil == "comissao"
+            fab.visibility = if (podeEditar) View.VISIBLE else View.GONE
+
+            adapter = JogoAdapter(
+                onEditar = { jogo ->
+                    val bundle = Bundle()
+                    bundle.putString("jogoId", jogo.id)
+                    findNavController().navigate(
+                        R.id.action_jogosFragment_to_jogoDetalheFragment, bundle)
+                },
+                onDeletar = { jogo ->
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Remover Jogo")
+                        .setMessage("${jogo.timeMandanteNome} x ${jogo.timeVisitanteNome}")
+                        .setPositiveButton("Sim") { _, _ -> viewModel.deletar(jogo) }
+                        .setNegativeButton("Cancelar", null)
+                        .show()
+                },
+                onIniciar = { jogo -> tratarIniciar(jogo) },
+                onIntervalo = { jogo -> tratarIntervalo(jogo) },
+                onFinalizar = { jogo -> tratarFinalizar(jogo) },
+                onGolMandante = { jogo, delta ->
+                    val novo = (jogo.placarMandante + delta).coerceAtLeast(0)
+                    viewModel.atualizar(jogo.copy(placarMandante = novo))
+                },
+                onGolVisitante = { jogo, delta ->
+                    val novo = (jogo.placarVisitante + delta).coerceAtLeast(0)
+                    viewModel.atualizar(jogo.copy(placarVisitante = novo))
+                },
+                podeEditar = podeEditar
+            )
+
+            view.findViewById<RecyclerView>(R.id.recyclerJogos).apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = this@JogosFragment.adapter
             }
-        )
 
-        view.findViewById<RecyclerView>(R.id.recyclerJogos).apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = this@JogosFragment.adapter
+            viewModel.todos.observe(viewLifecycleOwner) { lista ->
+                swipeRefresh.isRefreshing = false
+                adapter.atualizarLista(lista)
+                layoutVazio.visibility = if (lista.isEmpty()) View.VISIBLE else View.GONE
+                recycler.visibility = if (lista.isEmpty()) View.GONE else View.VISIBLE
+            }
         }
 
-        viewModel.todos.observe(viewLifecycleOwner) { lista ->
-            adapter.atualizarLista(lista)
-        }
-
-        view.findViewById<FloatingActionButton>(R.id.fabAdicionarJogo).setOnClickListener {
+        fab.setOnClickListener {
             val bundle = Bundle()
-            bundle.putInt("jogoId", 0)
+            bundle.putString("jogoId", "")
             findNavController().navigate(
                 R.id.action_jogosFragment_to_jogoDetalheFragment, bundle)
         }
@@ -89,9 +131,8 @@ class JogosFragment : Fragment() {
         }
     }
 
-    private fun horaAtual(): String {
-        return SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
-    }
+    private fun horaAtual(): String =
+        SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
 
     private fun horaParaMinutos(hora: String): Int {
         return try {
@@ -102,26 +143,23 @@ class JogosFragment : Fragment() {
 
     private fun minutosDesdeInicio(horarioInicio: String): Int {
         if (horarioInicio.isEmpty()) return 0
-        val agora = horaParaMinutos(horaAtual())
-        val inicio = horaParaMinutos(horarioInicio)
-        return agora - inicio
+        return horaParaMinutos(horaAtual()) - horaParaMinutos(horarioInicio)
     }
 
     private fun tratarIniciar(jogo: JogoEntity) {
         val agora = horaParaMinutos(horaAtual())
         val agendado = horaParaMinutos(jogo.hora)
-
         if (agora < agendado) {
             AlertDialog.Builder(requireContext())
                 .setTitle("Iniciar antes do horário")
-                .setMessage("O jogo está agendado para ${jogo.hora}. Deseja iniciar agora mesmo assim?")
+                .setMessage("O jogo está agendado para ${jogo.hora}. Deseja iniciar mesmo assim?")
                 .setPositiveButton("Sim") { _, _ -> iniciarJogo(jogo) }
                 .setNegativeButton("Cancelar", null)
                 .show()
         } else {
             AlertDialog.Builder(requireContext())
                 .setTitle("Iniciar Jogo")
-                .setMessage("${jogo.timeMandanteNome} x ${jogo.timeVisitanteNome}\nDeseja iniciar o jogo?")
+                .setMessage("${jogo.timeMandanteNome} x ${jogo.timeVisitanteNome}\nDeseja iniciar?")
                 .setPositiveButton("Sim") { _, _ -> iniciarJogo(jogo) }
                 .setNegativeButton("Cancelar", null)
                 .show()
@@ -129,14 +167,10 @@ class JogosFragment : Fragment() {
     }
 
     private fun iniciarJogo(jogo: JogoEntity) {
-        viewModel.atualizar(jogo.copy(
-            status = "Em Andamento",
-            horarioInicio = horaAtual()
-        ))
+        viewModel.atualizar(jogo.copy(status = "Em Andamento", horarioInicio = horaAtual()))
     }
 
     private fun tratarIntervalo(jogo: JogoEntity) {
-        // Se status for "Intervalo", é retomar
         if (jogo.status == "Intervalo") {
             AlertDialog.Builder(requireContext())
                 .setTitle("Retomar Jogo")
@@ -148,13 +182,11 @@ class JogosFragment : Fragment() {
                 .show()
             return
         }
-
         val minutos = minutosDesdeInicio(jogo.horarioInicio)
-
         if (minutos < 45) {
             AlertDialog.Builder(requireContext())
                 .setTitle("Intervalo antes do tempo")
-                .setMessage("Apenas $minutos minutos de jogo. O intervalo normalmente ocorre após 45 minutos. Tem certeza?")
+                .setMessage("Apenas $minutos minutos de jogo. O intervalo ocorre após 45min. Tem certeza?")
                 .setPositiveButton("Sim") { _, _ -> registrarIntervalo(jogo) }
                 .setNegativeButton("Cancelar", null)
                 .show()
@@ -169,26 +201,22 @@ class JogosFragment : Fragment() {
     }
 
     private fun registrarIntervalo(jogo: JogoEntity) {
-        viewModel.atualizar(jogo.copy(
-            status = "Intervalo",
-            horarioIntervalo = horaAtual()
-        ))
+        viewModel.atualizar(jogo.copy(status = "Intervalo", horarioIntervalo = horaAtual()))
     }
 
     private fun tratarFinalizar(jogo: JogoEntity) {
         val minutos = minutosDesdeInicio(jogo.horarioInicio)
-
         if (minutos < 105) {
             AlertDialog.Builder(requireContext())
                 .setTitle("Finalizar antes do tempo")
-                .setMessage("Apenas $minutos minutos desde o início. O tempo mínimo é de 105 minutos (45 + 15 de intervalo + 45). Tem certeza que deseja finalizar?")
+                .setMessage("Apenas $minutos minutos. Mínimo são 105 min (45+15+45). Tem certeza?")
                 .setPositiveButton("Sim") { _, _ -> finalizarJogo(jogo) }
                 .setNegativeButton("Cancelar", null)
                 .show()
         } else {
             AlertDialog.Builder(requireContext())
                 .setTitle("Finalizar Jogo")
-                .setMessage("Deseja finalizar o jogo?\n${jogo.timeMandanteNome} ${jogo.placarMandante} x ${jogo.placarVisitante} ${jogo.timeVisitanteNome}")
+                .setMessage("${jogo.timeMandanteNome} ${jogo.placarMandante} x ${jogo.placarVisitante} ${jogo.timeVisitanteNome}\nConfirmar?")
                 .setPositiveButton("Sim") { _, _ -> finalizarJogo(jogo) }
                 .setNegativeButton("Cancelar", null)
                 .show()
@@ -196,10 +224,7 @@ class JogosFragment : Fragment() {
     }
 
     private fun finalizarJogo(jogo: JogoEntity) {
-        viewModel.atualizar(jogo.copy(
-            status = "Concluído",
-            horarioFim = horaAtual()
-        ))
+        viewModel.atualizar(jogo.copy(status = "Concluído", horarioFim = horaAtual()))
     }
 
     override fun onResume() {

@@ -10,8 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.futebolamador.R
 import com.example.futebolamador.data.JogoEntity
-import java.text.SimpleDateFormat
-import java.util.*
 
 class JogoAdapter(
     private var jogos: List<JogoEntity> = emptyList(),
@@ -21,7 +19,9 @@ class JogoAdapter(
     private val onIntervalo: (JogoEntity) -> Unit,
     private val onFinalizar: (JogoEntity) -> Unit,
     private val onGolMandante: (JogoEntity, Int) -> Unit,
-    private val onGolVisitante: (JogoEntity, Int) -> Unit
+    private val onGolVisitante: (JogoEntity, Int) -> Unit,
+    private val podeEditar: Boolean = false
+    private val brasoes: Map<String, String> = emptyMap()
 ) : RecyclerView.Adapter<JogoAdapter.JogoViewHolder>() {
 
     inner class JogoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -56,12 +56,34 @@ class JogoAdapter(
         holder.txtVisitante.text = jogo.timeVisitanteNome
         holder.txtData.text = "${jogo.data} ${jogo.hora}"
 
+        // Oculta editar/deletar para torcedores
+        holder.btnEditar.visibility = if (podeEditar) View.VISIBLE else View.GONE
+        holder.btnDeletar.visibility = if (podeEditar) View.VISIBLE else View.GONE
+
+        // Carrega brasão mandante
+        val brasaoMandante = brasoes[jogo.timeMandanteId]
+        if (!brasaoMandante.isNullOrEmpty()) {
+            try {
+                holder.itemView.findViewById<ImageView>(R.id.imgMandante)
+                    .setImageURI(android.net.Uri.parse(brasaoMandante))
+            } catch (e: Exception) {}
+        }
+
+// Carrega brasão visitante
+        val brasaoVisitante = brasoes[jogo.timeVisitanteId]
+        if (!brasaoVisitante.isNullOrEmpty()) {
+            try {
+                holder.itemView.findViewById<ImageView>(R.id.imgVisitante)
+                    .setImageURI(android.net.Uri.parse(brasaoVisitante))
+            } catch (e: Exception) {}
+        }
+
         when (jogo.status) {
             "Agendado" -> {
                 holder.txtPlacar.text = "vs"
                 holder.txtStatus.text = "Agendado"
                 holder.txtStatus.setBackgroundColor(Color.parseColor("#1565C0"))
-                holder.btnIniciar.visibility = View.VISIBLE
+                holder.btnIniciar.visibility = if (podeEditar) View.VISIBLE else View.GONE
                 holder.layoutBotoesControle.visibility = View.GONE
                 holder.layoutBotoesGol.visibility = View.GONE
             }
@@ -70,15 +92,15 @@ class JogoAdapter(
                 holder.txtStatus.text = "Em Andamento"
                 holder.txtStatus.setBackgroundColor(Color.parseColor("#43A047"))
                 holder.btnIniciar.visibility = View.GONE
-                holder.layoutBotoesControle.visibility = View.VISIBLE
-                holder.layoutBotoesGol.visibility = View.VISIBLE
+                holder.layoutBotoesControle.visibility = if (podeEditar) View.VISIBLE else View.GONE
+                holder.layoutBotoesGol.visibility = if (podeEditar) View.VISIBLE else View.GONE
             }
             "Intervalo" -> {
                 holder.txtPlacar.text = "${jogo.placarMandante} x ${jogo.placarVisitante}"
                 holder.txtStatus.text = "Intervalo"
                 holder.txtStatus.setBackgroundColor(Color.parseColor("#FFB300"))
                 holder.btnIniciar.visibility = View.GONE
-                holder.layoutBotoesControle.visibility = View.VISIBLE
+                holder.layoutBotoesControle.visibility = if (podeEditar) View.VISIBLE else View.GONE
                 holder.layoutBotoesGol.visibility = View.GONE
                 holder.btnIntervalo.text = "Retomar"
             }

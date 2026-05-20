@@ -13,11 +13,14 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.futebolamador.R
 import com.example.futebolamador.data.TimeEntity
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.launch
 
 class TimeDetalheFragment : Fragment() {
 
@@ -29,6 +32,7 @@ class TimeDetalheFragment : Fragment() {
     private lateinit var editOutraCidade: EditText
     private lateinit var editDataFundacao: EditText
     private lateinit var imgBrasaoPreview: ImageView
+    private lateinit var toolbar: MaterialToolbar
 
     private var timeAtual: TimeEntity? = null
     private var brasaoUri: String = ""
@@ -72,17 +76,13 @@ class TimeDetalheFragment : Fragment() {
         editOutraCidade = view.findViewById(R.id.editOutraCidade)
         editDataFundacao = view.findViewById(R.id.editDataFundacao)
         imgBrasaoPreview = view.findViewById(R.id.imgBrasaoPreview)
+        toolbar = view.findViewById(R.id.toolbar)
 
-        // Botão voltar
-        view.findViewById<MaterialToolbar>(R.id.toolbar)
-            .setNavigationOnClickListener { findNavController().popBackStack() }
+        toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        // Spinner de cidades
+        // Configura spinner de cidades
         val adapterCidades = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            cidades
-        )
+            requireContext(), android.R.layout.simple_spinner_item, cidades)
         adapterCidades.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCidade.adapter = adapterCidades
 
@@ -94,31 +94,27 @@ class TimeDetalheFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-        // Máscara de data DD/MM/AAAA
+        // Máscara de data
         editDataFundacao.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 if (aplicandoMascara) return
                 aplicandoMascara = true
-
                 var texto = s.toString().replace("/", "")
                 if (texto.length > 8) texto = texto.substring(0, 8)
-
                 val formatado = StringBuilder()
                 for (i in texto.indices) {
                     formatado.append(texto[i])
                     if (i == 1 || i == 3) formatado.append("/")
                 }
-
                 editDataFundacao.setText(formatado)
                 editDataFundacao.setSelection(formatado.length)
                 aplicandoMascara = false
             }
         })
 
-        // Brasão
-        view.findViewById<android.widget.Button>(R.id.btnSelecionarBrasao).setOnClickListener {
+        view.findViewById<Button>(R.id.btnSelecionarBrasao).setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 type = "image/*"
@@ -128,45 +124,57 @@ class TimeDetalheFragment : Fragment() {
             selecionarImagem.launch(intent)
         }
 
-        // Se for edição, preenche os campos
-        val timeId = arguments?.getInt("timeId") ?: 0
-        if (timeId > 0) {
-            timeAtual = viewModel.getPorId(timeId)
-            timeAtual?.let { time ->
-                editNome.setText(time.nome)
-                editDataFundacao.setText(time.dataFundacao)
-                brasaoUri = time.brasaoUri
-                if (brasaoUri.isNotEmpty()) {
-                    try { imgBrasaoPreview.setImageURI(Uri.parse(brasaoUri)) } catch (e: Exception) {}
-                }
-                // Seleciona a cidade no spinner
-                val index = cidades.indexOf(time.cidade)
-                if (index >= 0) {
-                    spinnerCidade.setSelection(index)
-                } else {
-                    // Cidade não está na lista — seleciona "Outra" e preenche o campo
-                    spinnerCidade.setSelection(cidades.indexOf("Outra"))
-                    layoutOutraCidade.visibility = View.VISIBLE
-                    editOutraCidade.setText(time.cidade)
+        val timeId = arguments?.getString("timeId") ?: ""
+
+        if (timeId.isNotEmpty()) {
+            // EDIÇÃO — busca direto do Firestore pelo ID
+            toolbar.title = "Editar Time"
+            lifecycleScope.launch {
+                timeAtual = viewModel.getPorIdFirestore(timeId)
+                timeAtual?.let { time ->
+                    preencherFormulario(time)
+                } ?: run {
+                    Snackbar.make(view, "Erro ao carregar time", Snackbar.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
                 }
             }
+        } else {
+            // NOVO TIME
+            toolbar.title = "Cadastrar Time"
         }
 
-        view.findViewById<android.widget.Button>(R.id.btnSalvar).setOnClickListener { salvar() }
-        view.findViewById<android.widget.Button>(R.id.btnCancelar).setOnClickListener {
+        view.findViewById<Button>(R.id.btnSalvar).setOnClickListener { salvar(view) }
+        view.findViewById<Button>(R.id.btnCancelar).setOnClickListener {
             findNavController().popBackStack()
         }
     }
 
-    private fun salvar() {
-        val nome = editNome.text.toString().trim()
+    private fun preencherFormulario(time: TimeEntity) {
+        editNome.setText(time.nome)
+        editDataFundacao.setText(time.dataFundacao)
+        brasaoUri = time.brasaoUri
 
+        if (brasaoUri.isNotEmpty()) {
+            try { imgBrasaoPreview.setImageURI(Uri.parse(brasaoUri)) } catch (e: Exception) {}
+        }
+
+        val index = cidades.indexOf(time.cidade)
+        if (index >= 0) {
+            spinnerCidade.setSelection(index)
+        } else {
+            spinnerCidade.setSelection(cidades.indexOf("Outra"))
+            layoutOutraCidade.visibility = View.VISIBLE
+            editOutraCidade.setText(time.cidade)
+        }
+    }
+
+    private fun salvar(view: View) {
+        val nome = editNome.text.toString().trim()
         val cidade = if (spinnerCidade.selectedItem.toString() == "Outra") {
             editOutraCidade.text.toString().trim()
         } else {
             spinnerCidade.selectedItem.toString()
         }
-
         val dataFundacao = editDataFundacao.text.toString().trim()
 
         if (nome.isEmpty()) {
@@ -179,7 +187,7 @@ class TimeDetalheFragment : Fragment() {
         }
 
         val time = TimeEntity(
-            id = timeAtual?.id ?: 0,
+            id = timeAtual?.id ?: "",
             nome = nome,
             cidade = cidade,
             dataFundacao = dataFundacao,
@@ -188,10 +196,10 @@ class TimeDetalheFragment : Fragment() {
 
         if (timeAtual != null) {
             viewModel.atualizar(time)
-            Toast.makeText(requireContext(), "Time atualizado!", Toast.LENGTH_SHORT).show()
+            Snackbar.make(view, "Time atualizado!", Snackbar.LENGTH_SHORT).show()
         } else {
             viewModel.inserir(time)
-            Toast.makeText(requireContext(), "Time cadastrado!", Toast.LENGTH_SHORT).show()
+            Snackbar.make(view, "Time cadastrado!", Snackbar.LENGTH_SHORT).show()
         }
 
         findNavController().popBackStack()

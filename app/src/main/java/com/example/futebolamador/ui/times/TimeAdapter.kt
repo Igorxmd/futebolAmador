@@ -4,6 +4,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,8 +13,10 @@ import com.example.futebolamador.data.TimeEntity
 
 class TimeAdapter(
     private var times: List<TimeEntity> = emptyList(),
+    private val onClicar: (TimeEntity) -> Unit,
     private val onEditar: (TimeEntity) -> Unit,
-    private val onDeletar: (TimeEntity) -> Unit
+    private val onDeletar: (TimeEntity) -> Unit,
+    private val podeEditar: Boolean = false
 ) : RecyclerView.Adapter<TimeAdapter.TimeViewHolder>() {
 
     inner class TimeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -21,8 +24,8 @@ class TimeAdapter(
         val nomeText: TextView = view.findViewById(R.id.txtNome)
         val cidadeText: TextView = view.findViewById(R.id.txtCidade)
         val fundacaoText: TextView = view.findViewById(R.id.txtFundacao)
-        val btnEditar: View = view.findViewById(R.id.btnEditar)
-        val btnDeletar: View = view.findViewById(R.id.btnDeletar)
+        val btnEditar: ImageButton = view.findViewById(R.id.btnEditar)
+        val btnDeletar: ImageButton = view.findViewById(R.id.btnDeletar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeViewHolder {
@@ -38,7 +41,6 @@ class TimeAdapter(
         holder.fundacaoText.text = if (time.dataFundacao.isNotEmpty())
             "Fundado em: ${time.dataFundacao}" else ""
 
-        // Mostra o brasão se tiver, senão mostra ícone padrão
         if (time.brasaoUri.isNotEmpty()) {
             try {
                 holder.imgBrasao.setImageURI(Uri.parse(time.brasaoUri))
@@ -46,10 +48,14 @@ class TimeAdapter(
                 holder.imgBrasao.setImageResource(android.R.drawable.ic_menu_gallery)
             }
         } else {
-            // Sem brasão: mostra fundo cinza com ícone discreto
             holder.imgBrasao.setImageResource(android.R.drawable.ic_menu_gallery)
         }
 
+        holder.btnEditar.visibility = if (podeEditar) View.VISIBLE else View.GONE
+        holder.btnDeletar.visibility = if (podeEditar) View.VISIBLE else View.GONE
+
+        // Clique no card inteiro abre o perfil
+        holder.itemView.setOnClickListener { onClicar(time) }
         holder.btnEditar.setOnClickListener { onEditar(time) }
         holder.btnDeletar.setOnClickListener { onDeletar(time) }
     }

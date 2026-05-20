@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="3dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#1E4620">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,17 +16,15 @@
         android:padding="12dp"
         android:gravity="center_vertical">
 
-        <!-- Brasão do time -->
         <ImageView
             android:id="@+id/imgBrasao"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:scaleType="centerCrop"
-            android:contentDescription="Brasão do time"
-            android:background="#EEEEEE"
-            android:padding="4dp" />
+            android:background="#2E7D32"
+            android:padding="4dp"
+            android:contentDescription="Brasão"/>
 
-        <!-- Infos do time -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -39,41 +38,41 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#212121" />
+                android:textColor="#FFFFFF"/>
 
             <TextView
                 android:id="@+id/txtCidade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
-                android:textColor="#757575" />
+                android:textColor="#B0BEC5"/>
 
             <TextView
                 android:id="@+id/txtFundacao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:textColor="#9E9E9E" />
+                android:textColor="#78909C"/>
 
         </LinearLayout>
 
-        <!-- Botão editar -->
         <ImageButton
             android:id="@+id/btnEditar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_edit"
-            android:contentDescription="Editar" />
+            android:tint="#B0BEC5"
+            android:contentDescription="Editar"/>
 
-        <!-- Botão deletar -->
         <ImageButton
             android:id="@+id/btnDeletar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_delete"
-            android:contentDescription="Remover" />
+            android:tint="#E57373"
+            android:contentDescription="Remover"/>
 
     </LinearLayout>
 

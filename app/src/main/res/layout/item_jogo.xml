@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="3dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#1E4620">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,47 +15,124 @@
         android:orientation="vertical"
         android:padding="12dp">
 
+        <!-- Data, hora e status -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/txtData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:textColor="#B0BEC5"/>
+
+            <TextView
+                android:id="@+id/txtStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                app:backgroundTint="#0D47A1"/>
+
+        </LinearLayout>
+
         <!-- Times e placar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="4dp">
+            android:layout_marginBottom="10dp">
 
-            <TextView
-                android:id="@+id/txtMandante"
+            <!-- Time Mandante -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/imgMandante"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_menu_myplaces"
+                    android:layout_marginBottom="6dp"
+                    android:contentDescription="Time mandante"/>
+
+                <TextView
+                    android:id="@+id/txtMandante"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center"
+                    android:maxLines="2"/>
+
+            </LinearLayout>
+
+            <!-- Placar / VS -->
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="#212121"
-                android:gravity="center" />
+                android:orientation="vertical"
+                android:gravity="center">
 
-            <TextView
-                android:id="@+id/txtPlacar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#1565C0"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp" />
+                <TextView
+                    android:id="@+id/txtPlacar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center"/>
 
-            <TextView
-                android:id="@+id/txtVisitante"
+            </LinearLayout>
+
+            <!-- Time Visitante -->
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="#212121"
-                android:gravity="center" />
+                android:layout_weight="2"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/imgVisitante"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_menu_myplaces"
+                    android:layout_marginBottom="6dp"
+                    android:contentDescription="Time visitante"/>
+
+                <TextView
+                    android:id="@+id/txtVisitante"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center"
+                    android:maxLines="2"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Botões de gol (só aparecem em andamento) -->
+        <!-- Botões de gol (só Em Andamento) -->
         <LinearLayout
             android:id="@+id/layoutBotoesGol"
             android:layout_width="match_parent"
@@ -71,6 +149,7 @@
                 android:text="−"
                 android:textSize="18sp"
                 android:padding="0dp"
+                android:backgroundTint="#2E7D32"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
             <Button
@@ -80,7 +159,8 @@
                 android:text="+"
                 android:textSize="18sp"
                 android:padding="0dp"
-                android:layout_marginStart="4dp"/>
+                android:layout_marginStart="4dp"
+                android:backgroundTint="#2E7D32"/>
 
             <View
                 android:layout_width="0dp"
@@ -94,6 +174,7 @@
                 android:text="−"
                 android:textSize="18sp"
                 android:padding="0dp"
+                android:backgroundTint="#2E7D32"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
             <Button
@@ -103,55 +184,30 @@
                 android:text="+"
                 android:textSize="18sp"
                 android:padding="0dp"
-                android:layout_marginStart="4dp"/>
+                android:layout_marginStart="4dp"
+                android:backgroundTint="#2E7D32"/>
 
         </LinearLayout>
 
-        <!-- Data, hora e status -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp">
-
-            <TextView
-                android:id="@+id/txtData"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="12sp"
-                android:textColor="#757575" />
-
-            <TextView
-                android:id="@+id/txtStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="11sp"
-                android:textColor="#FFFFFF"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp" />
-
-        </LinearLayout>
-
-        <!-- Botão Iniciar (só aparece quando Agendado) -->
+        <!-- Botão Iniciar -->
         <Button
             android:id="@+id/btnIniciar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Iniciar Jogo"
+            android:text="▶ Iniciar Jogo"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#0D47A1"
             android:visibility="gone"
-            android:backgroundTint="#43A047"/>
+            android:layout_marginBottom="4dp"/>
 
-        <!-- Botões de controle (só aparecem Em Andamento) -->
+        <!-- Botões Intervalo e Finalizar -->
         <LinearLayout
             android:id="@+id/layoutBotoesControle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:layout_marginBottom="4dp">
 
             <Button
                 android:id="@+id/btnIntervalo"
@@ -159,8 +215,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Intervalo"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#FFB300"/>
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#FFB300"
+                android:layout_marginEnd="4dp"/>
 
             <Button
                 android:id="@+id/btnFinalizar"
@@ -168,18 +225,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Finalizar"
-                android:layout_marginStart="4dp"
-                android:backgroundTint="#E53935"/>
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#E53935"
+                android:layout_marginStart="4dp"/>
 
         </LinearLayout>
 
-        <!-- Botões editar/deletar -->
+        <!-- Editar / Deletar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="end"
-            android:layout_marginTop="4dp">
+            android:gravity="end">
 
             <ImageButton
                 android:id="@+id/btnEditarJogo"
@@ -187,7 +244,8 @@
                 android:layout_height="36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/ic_menu_edit"
-                android:contentDescription="Editar" />
+                android:tint="#B0BEC5"
+                android:contentDescription="Editar"/>
 
             <ImageButton
                 android:id="@+id/btnDeletarJogo"
@@ -195,7 +253,8 @@
                 android:layout_height="36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/ic_menu_delete"
-                android:contentDescription="Remover" />
+                android:tint="#E57373"
+                android:contentDescription="Remover"/>
 
         </LinearLayout>
 

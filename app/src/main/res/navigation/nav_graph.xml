@@ -2,7 +2,48 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/timesFragment">
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.futebolamador.auth.SplashFragment"
+        android:label="Splash">
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_splashFragment_to_timesFragment"
+            app:destination="@id/timesFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.futebolamador.auth.LoginFragment"
+        android:label="Login">
+        <action
+            android:id="@+id/action_loginFragment_to_timesFragment"
+            app:destination="@id/timesFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_loginFragment_to_cadastroFragment"
+            app:destination="@id/cadastroFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/cadastroFragment"
+        android:name="com.example.futebolamador.auth.CadastroFragment"
+        android:label="Cadastro">
+        <action
+            android:id="@+id/action_cadastroFragment_to_timesFragment"
+            app:destination="@id/timesFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
     <fragment
         android:id="@+id/timesFragment"
@@ -10,21 +51,27 @@
         android:label="Times">
         <action
             android:id="@+id/action_timesFragment_to_timeDetalheFragment"
-            app:destination="@id/timeDetalheFragment" />
+            app:destination="@id/timeDetalheFragment"/>
+        <action
+            android:id="@+id/action_timesFragment_to_timePerfilFragment"
+            app:destination="@id/timePerfilFragment"/>
         <action
             android:id="@+id/action_timesFragment_to_jogosFragment"
-            app:destination="@id/jogosFragment" />
+            app:destination="@id/jogosFragment"/>
+        <action
+            android:id="@+id/action_timesFragment_to_perfilFragment"
+            app:destination="@id/perfilFragment"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/timePerfilFragment"
+        android:name="com.example.futebolamador.ui.times.TimePerfilFragment"
+        android:label="Perfil do Time"/>
 
     <fragment
         android:id="@+id/timeDetalheFragment"
         android:name="com.example.futebolamador.ui.times.TimeDetalheFragment"
-        android:label="Cadastrar Time">
-        <argument
-            android:name="timeId"
-            app:argType="integer"
-            android:defaultValue="0" />
-    </fragment>
+        android:label="Cadastrar Time"/>
 
     <fragment
         android:id="@+id/jogosFragment"
@@ -32,17 +79,31 @@
         android:label="Jogos">
         <action
             android:id="@+id/action_jogosFragment_to_jogoDetalheFragment"
-            app:destination="@id/jogoDetalheFragment" />
+            app:destination="@id/jogoDetalheFragment"/>
     </fragment>
 
     <fragment
         android:id="@+id/jogoDetalheFragment"
         android:name="com.example.futebolamador.ui.jogos.JogoDetalheFragment"
-        android:label="Cadastrar Jogo">
-        <argument
-            android:name="jogoId"
-            app:argType="integer"
-            android:defaultValue="0" />
+        android:label="Agendar Jogo"/>
+
+    <fragment
+        android:id="@+id/perfilFragment"
+        android:name="com.example.futebolamador.auth.PerfilFragment"
+        android:label="Minha Conta">
+        <action
+            android:id="@+id/action_perfilFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/timesFragment"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_perfilFragment_to_solicitacoesFragment"
+            app:destination="@id/solicitacoesFragment"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/solicitacoesFragment"
+        android:name="com.example.futebolamador.auth.SolicitacoesFragment"
+        android:label="Solicitações"/>
 
 </navigation>

@@ -9,12 +9,14 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.futebolamador.R
 import com.example.futebolamador.data.JogoEntity
 import com.example.futebolamador.data.TimeEntity
 import com.example.futebolamador.repository.TimeRepository
 import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.coroutines.launch
 
 class JogoDetalheFragment : Fragment() {
 
@@ -43,18 +45,8 @@ class JogoDetalheFragment : Fragment() {
         editData = view.findViewById(R.id.editData)
         editHora = view.findViewById(R.id.editHora)
 
-        // Botão voltar
         view.findViewById<MaterialToolbar>(R.id.toolbarJogo)
             .setNavigationOnClickListener { findNavController().popBackStack() }
-
-        // Carrega times
-        times = TimeRepository(requireContext()).getTodos()
-        val nomesTimes = times.map { it.nome }
-        val adapterTimes = ArrayAdapter(requireContext(),
-            android.R.layout.simple_spinner_item, nomesTimes)
-        adapterTimes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerMandante.adapter = adapterTimes
-        spinnerVisitante.adapter = adapterTimes
 
         // Máscara data DD/MM/AAAA
         editData.addTextChangedListener(object : TextWatcher {
@@ -96,17 +88,28 @@ class JogoDetalheFragment : Fragment() {
             }
         })
 
-        // Se for edição, preenche os campos
-        val jogoId = arguments?.getInt("jogoId") ?: 0
-        if (jogoId > 0) {
-            jogoAtual = viewModel.getPorId(jogoId)
-            jogoAtual?.let { jogo ->
-                val indexMandante = times.indexOfFirst { it.id == jogo.timeMandanteId }
-                val indexVisitante = times.indexOfFirst { it.id == jogo.timeVisitanteId }
-                if (indexMandante >= 0) spinnerMandante.setSelection(indexMandante)
-                if (indexVisitante >= 0) spinnerVisitante.setSelection(indexVisitante)
-                editData.setText(jogo.data)
-                editHora.setText(jogo.hora)
+        // Carrega times via coroutine
+        lifecycleScope.launch {
+            times = TimeRepository().getTodos()
+            val nomesTimes = times.map { it.nome }
+            val adapterTimes = ArrayAdapter(requireContext(),
+                android.R.layout.simple_spinner_item, nomesTimes)
+            adapterTimes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerMandante.adapter = adapterTimes
+            spinnerVisitante.adapter = adapterTimes
+
+            // Se for edição, preenche os campos
+            val jogoId = arguments?.getString("jogoId") ?: ""
+            if (jogoId.isNotEmpty()) {
+                jogoAtual = viewModel.getPorIdFirestore(jogoId)
+                jogoAtual?.let { jogo ->
+                    val indexMandante = times.indexOfFirst { it.id == jogo.timeMandanteId }
+                    val indexVisitante = times.indexOfFirst { it.id == jogo.timeVisitanteId }
+                    if (indexMandante >= 0) spinnerMandante.setSelection(indexMandante)
+                    if (indexVisitante >= 0) spinnerVisitante.setSelection(indexVisitante)
+                    editData.setText(jogo.data)
+                    editHora.setText(jogo.hora)
+                }
             }
         }
 
@@ -141,13 +144,13 @@ class JogoDetalheFragment : Fragment() {
         }
 
         val jogo = JogoEntity(
-            id = jogoAtual?.id ?: 0,
+            id = jogoAtual?.id ?: "",
             timeMandanteId = mandante.id,
             timeVisitanteId = visitante.id,
             timeMandanteNome = mandante.nome,
             timeVisitanteNome = visitante.nome,
             data = data,
-            hora = hora,
+            hora = hora.ifEmpty { "00:00" },
             placarMandante = jogoAtual?.placarMandante ?: 0,
             placarVisitante = jogoAtual?.placarVisitante ?: 0,
             status = jogoAtual?.status ?: "Agendado",
@@ -163,7 +166,6 @@ class JogoDetalheFragment : Fragment() {
             viewModel.inserir(jogo)
             Toast.makeText(requireContext(), "Jogo agendado!", Toast.LENGTH_SHORT).show()
         }
-
         findNavController().popBackStack()
     }
 }

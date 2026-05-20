@@ -3,40 +3,38 @@ package com.example.futebolamador.ui.times
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.futebolamador.data.TimeEntity
 import com.example.futebolamador.repository.TimeRepository
+import kotlinx.coroutines.launch
 
 class TimeViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = TimeRepository(application)
-
-    // MutableLiveData para a tela observar as mudanças
+    private val repository = TimeRepository()
     val todos = MutableLiveData<List<TimeEntity>>()
 
-    init {
-        carregarTodos()
+    init { carregarTodos() }
+
+    fun carregarTodos() = viewModelScope.launch {
+        todos.postValue(repository.getTodos())
     }
 
-    fun carregarTodos() {
-        todos.value = repository.getTodos()
-    }
-
-    fun inserir(time: TimeEntity) {
+    fun inserir(time: TimeEntity) = viewModelScope.launch {
         repository.inserir(time)
         carregarTodos()
     }
 
-    fun atualizar(time: TimeEntity) {
+    fun atualizar(time: TimeEntity) = viewModelScope.launch {
         repository.atualizar(time)
         carregarTodos()
     }
 
-    fun deletar(time: TimeEntity) {
+    fun deletar(time: TimeEntity) = viewModelScope.launch {
         repository.deletar(time)
         carregarTodos()
     }
 
-    fun getPorId(id: Int): TimeEntity? {
+    suspend fun getPorIdFirestore(id: String): TimeEntity? {
         return repository.getPorId(id)
     }
 }

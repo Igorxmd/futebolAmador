@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="verde_fundo">#1A3A1A</color>
+    <color name="verde_card">#1E4620</color>
+    <color name="verde_claro">#2E7D32</color>
+    <color name="azul_escuro">#0D47A1</color>
+    <color name="branco">#FFFFFF</color>
+    <color name="cinza_claro">#B0BEC5</color>
+    <color name="amarelo">#FFB300</color>
+    <color name="vermelho">#E53935</color>
+    <color name="verde_vitoria">#66BB6A</color>
 </resources>
