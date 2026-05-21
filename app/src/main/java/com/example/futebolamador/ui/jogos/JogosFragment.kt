@@ -113,7 +113,7 @@ class JogosFragment : Fragment() {
                         true
                     }
                     R.id.nav_ranking -> {
-                        findNavController().navigate(R.id.action_global_rankingFragment)
+                        findNavController().navigate(R.id.rankingFragment)
                         true
                     }
                     else -> true
