@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F1F8E9">
+    android:background="#1A3A1A">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
             android:id="@+id/toolbarTimes"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#0D47A1"
+            android:background="#0D2B0D"
             app:title="Times"
             app:titleTextColor="#FFFFFF"
             app:menu="@menu/menu_toolbar"/>
@@ -29,9 +29,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="#1A3A1A">
 
-            <!-- Estado vazio -->
             <LinearLayout
                 android:id="@+id/layoutVazioTimes"
                 android:layout_width="match_parent"
@@ -45,6 +45,7 @@
                     android:layout_height="80dp"
                     android:src="@android:drawable/ic_menu_myplaces"
                     android:alpha="0.3"
+                    android:colorFilter="#FFFFFF"
                     android:layout_marginBottom="16dp"
                     android:contentDescription="Vazio"/>
 
@@ -53,14 +54,14 @@
                     android:layout_height="wrap_content"
                     android:text="Nenhum time cadastrado"
                     android:textSize="16sp"
-                    android:textColor="#9E9E9E"/>
+                    android:textColor="#B0BEC5"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Toque em + para adicionar"
                     android:textSize="13sp"
-                    android:textColor="#BDBDBD"/>
+                    android:textColor="#78909C"/>
 
             </LinearLayout>
 
@@ -78,7 +79,7 @@
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#0D47A1"
+        android:background="#0D2B0D"
         app:itemIconTint="#FFFFFF"
         app:itemTextColor="#FFFFFF"
         app:menu="@menu/bottom_nav_menu"/>
@@ -88,8 +89,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:backgroundTint="#1B5E20"
+        android:layout_margin="72dp"
+        android:backgroundTint="#2E7D32"
         android:contentDescription="Adicionar Time"
         app:srcCompat="@android:drawable/ic_input_add"/>
 

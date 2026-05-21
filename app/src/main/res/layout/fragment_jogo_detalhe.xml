@@ -35,7 +35,8 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#1E4620">
+                app:cardBackgroundColor="#FFFFFF"
+                android:layout_marginBottom="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -49,52 +50,50 @@
                         android:text="Dados do Jogo"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#FFFFFF"
+                        android:textColor="#1A3A1A"
                         android:layout_marginBottom="16dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Time Mandante"
-                        android:textColor="#B0BEC5"
-                        android:textSize="13sp"/>
+                        android:textColor="#757575"
+                        android:textSize="13sp"
+                        android:layout_marginBottom="4dp"/>
+
                     <Spinner
                         android:id="@+id/spinnerMandante"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:backgroundTint="#FFFFFF"
-                        android:popupBackground="#1E4620"/>
+                        android:layout_marginBottom="12dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Time Visitante"
-                        android:textColor="#B0BEC5"
-                        android:textSize="13sp"/>
+                        android:textColor="#757575"
+                        android:textSize="13sp"
+                        android:layout_marginBottom="4dp"/>
+
                     <Spinner
                         android:id="@+id/spinnerVisitante"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:backgroundTint="#FFFFFF"
-                        android:popupBackground="#1E4620"/>
+                        android:layout_marginBottom="12dp"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Data (DD/MM/AAAA)"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_marginBottom="12dp"
-                        app:boxStrokeColor="#4CAF50"
-                        app:hintTextColor="#B0BEC5">
+                        android:layout_marginBottom="12dp">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editData"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
                             android:maxLength="10"
-                            android:textColor="#FFFFFF"/>
+                            android:textColor="#212121"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -102,16 +101,14 @@
                         android:layout_height="wrap_content"
                         android:hint="Hora (HH:MM)"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_marginBottom="12dp"
-                        app:boxStrokeColor="#4CAF50"
-                        app:hintTextColor="#B0BEC5">
+                        android:layout_marginBottom="12dp">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editHora"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
                             android:maxLength="5"
-                            android:textColor="#FFFFFF"/>
+                            android:textColor="#212121"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -119,15 +116,13 @@
                         android:layout_height="wrap_content"
                         android:hint="Nome do Campo / Local"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_marginBottom="8dp"
-                        app:boxStrokeColor="#4CAF50"
-                        app:hintTextColor="#B0BEC5">
+                        android:layout_marginBottom="8dp">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editLocal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textCapWords"
-                            android:textColor="#FFFFFF"/>
+                            android:inputType="textCapSentences"
+                            android:textColor="#212121"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -136,8 +131,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp">
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btnCancelarJogo"
@@ -147,7 +141,8 @@
                     android:text="Cancelar"
                     android:textColor="#FFFFFF"
                     android:layout_marginEnd="8dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    app:strokeColor="#FFFFFF"/>
 
                 <Button
                     android:id="@+id/btnSalvarJogo"

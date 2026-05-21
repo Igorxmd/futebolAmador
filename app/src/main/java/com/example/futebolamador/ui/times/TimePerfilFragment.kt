@@ -104,7 +104,8 @@ class TimePerfilFragment : Fragment() {
                     onGolMandante = { _, _ -> },
                     onGolVisitante = { _, _ -> },
                     podeEditar = false,
-                    brasoes = emptyMap()
+                    brasoes = emptyMap(),
+                    onApostar = {}
                 )
             }
         }

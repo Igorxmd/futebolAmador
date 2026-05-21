@@ -141,7 +141,7 @@ class JogoAdapter(
         holder.btnApostar.setOnClickListener { onApostar(jogo) }
 
         holder.btnApostar.visibility =
-            if (jogo.status in listOf("Agendado", "Concluído")) View.VISIBLE else View.GONE
+            if (jogo.status in listOf("Agendado", "Em andamento")) View.VISIBLE else View.GONE
     }
 
     override fun getItemCount() = jogos.size

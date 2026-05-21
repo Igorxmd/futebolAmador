@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F5F5F5">
+    android:background="#1A3A1A">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -69,54 +69,57 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
+                    android:backgroundTint="#FFFFFF"
                     android:orientation="vertical"
                     android:padding="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
                         android:text="Dados da Conta"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
                         android:textColor="#212121"
-                        android:layout_marginBottom="12dp"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nome"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_marginBottom="12dp">
+                        android:layout_marginBottom="12dp"
+                        android:hint="Nome">
+
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editNomePerfil"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPersonName"/>
+                            android:inputType="textPersonName" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/txtEmailPerfil"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="13sp"
+                        android:layout_marginBottom="12dp"
                         android:textColor="#757575"
-                        android:layout_marginBottom="12dp"/>
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/txtPerfilAtual"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="13sp"
+                        android:layout_marginBottom="12dp"
                         android:textColor="#1565C0"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="12dp"/>
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp"
                         android:gravity="center_vertical"
-                        android:layout_marginBottom="12dp">
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="0dp"
@@ -124,22 +127,22 @@
                             android:layout_weight="1"
                             android:text="Seus pontos:"
                             android:textColor="#B0BEC5"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/txtMeusPontos"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="#66BB6A"
                             android:textSize="22sp"
-                            android:textStyle="bold"
-                            android:textColor="#66BB6A"/>
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=" pts"
-                            android:textSize="14sp"
-                            android:textColor="#B0BEC5"/>
+                            android:textColor="#B0BEC5"
+                            android:textSize="14sp" />
 
                     </LinearLayout>
 
@@ -147,7 +150,7 @@
                         android:id="@+id/btnSalvarPerfil"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Salvar alterações"/>
+                        android:text="Salvar alterações" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

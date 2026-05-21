@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F1F8E9">
+    android:background="#1A3A1A">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -40,45 +40,46 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="#0B1D8A"
+                    android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center">
+                    android:padding="16dp">
 
                     <ImageView
                         android:id="@+id/imgBrasaoPerfil"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:scaleType="centerCrop"
-                        android:src="@android:drawable/ic_menu_myplaces"
-                        android:background="#EEEEEE"
-                        android:padding="8dp"
                         android:layout_marginBottom="12dp"
-                        android:contentDescription="Brasão"/>
+                        android:background="#EEEEEE"
+                        android:contentDescription="Brasão"
+                        android:padding="8dp"
+                        android:scaleType="centerCrop"
+                        android:src="@android:drawable/ic_menu_myplaces" />
 
                     <TextView
                         android:id="@+id/txtNomePerfil"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="#1B5E20"
+                        android:layout_marginBottom="4dp"
                         android:gravity="center"
-                        android:layout_marginBottom="4dp"/>
+                        android:textColor="#1B5E20"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtCidadePerfil"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="15sp"
+                        android:layout_marginBottom="4dp"
                         android:textColor="#757575"
-                        android:layout_marginBottom="4dp"/>
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/txtFundacaoPerfil"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="13sp"
-                        android:textColor="#9E9E9E"/>
+                        android:textColor="#9E9E9E"
+                        android:textSize="13sp" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -94,17 +95,18 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
                     android:orientation="vertical"
                     android:padding="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
                         android:text="Estatísticas"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
                         android:textColor="#212121"
-                        android:layout_marginBottom="12dp"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -115,88 +117,96 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="vertical">
+
                             <TextView
                                 android:id="@+id/txtTotalJogos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="24sp"
-                                android:textStyle="bold"
+                                android:text="0"
                                 android:textColor="#1B5E20"
-                                android:text="0"/>
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Jogos"
-                                android:textSize="12sp"
-                                android:textColor="#757575"/>
+                                android:textColor="#757575"
+                                android:textSize="12sp" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="vertical">
+
                             <TextView
                                 android:id="@+id/txtVitorias"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="24sp"
-                                android:textStyle="bold"
+                                android:text="0"
                                 android:textColor="#43A047"
-                                android:text="0"/>
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Vitórias"
-                                android:textSize="12sp"
-                                android:textColor="#757575"/>
+                                android:textColor="#757575"
+                                android:textSize="12sp" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="vertical">
+
                             <TextView
                                 android:id="@+id/txtEmpates"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="24sp"
-                                android:textStyle="bold"
+                                android:text="0"
                                 android:textColor="#FFB300"
-                                android:text="0"/>
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Empates"
-                                android:textSize="12sp"
-                                android:textColor="#757575"/>
+                                android:textColor="#757575"
+                                android:textSize="12sp" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="vertical">
+
                             <TextView
                                 android:id="@+id/txtDerrotas"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="24sp"
-                                android:textStyle="bold"
+                                android:text="0"
                                 android:textColor="#E53935"
-                                android:text="0"/>
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Derrotas"
-                                android:textSize="12sp"
-                                android:textColor="#757575"/>
+                                android:textColor="#757575"
+                                android:textSize="12sp" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -218,18 +228,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nenhum jogo encontrado"
-                android:textColor="#9E9E9E"
+                android:textColor="#FF9E9E9E"
                 android:gravity="center"
                 android:padding="16dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerJogosTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#FFFFFF"
                 android:nestedScrollingEnabled="false"/>
 
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
