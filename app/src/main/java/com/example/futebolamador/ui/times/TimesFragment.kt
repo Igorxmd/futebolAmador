@@ -130,6 +130,8 @@ class TimesFragment : Fragment() {
             }
         }
 
+    }
+
     override fun onResume() {
         super.onResume()
         viewModel.carregarTodos()

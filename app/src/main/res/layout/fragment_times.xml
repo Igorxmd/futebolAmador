@@ -45,7 +45,6 @@
                     android:layout_height="80dp"
                     android:src="@android:drawable/ic_menu_myplaces"
                     android:alpha="0.3"
-                    android:colorFilter="#FFFFFF"
                     android:layout_marginBottom="16dp"
                     android:contentDescription="Vazio"/>
 
