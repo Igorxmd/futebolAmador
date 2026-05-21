@@ -37,7 +37,6 @@ class JogosFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val fab = view.findViewById<FloatingActionButton>(R.id.fabAdicionarJogo)
-
         val layoutVazio = view.findViewById<View>(R.id.layoutVazioJogos)
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerJogos)
         val swipeRefresh = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshJogos)
@@ -48,25 +47,16 @@ class JogosFragment : Fragment() {
             viewModel.carregarTodos()
         }
 
-        lifecycleScope.launch {
-            val perfil = SessaoManager.perfilAtual()
-            val podeEditar = perfil == "admin" || perfil == "comissao"
-
-            // Carrega mapa de brasões dos times
-            val times = com.example.futebolamador.repository.TimeRepository().getTodos()
-            val brasoes = times.associate { it.id to it.brasaoUri }
-
-            adapter = JogoAdapter(
-                // ... callbacks existentes ...
-                podeEditar = podeEditar,
-                brasoes = brasoes
-            )
-        }
-
+        // CORRIGIDO: apenas UM bloco lifecycleScope com tudo junto;
+        // removido o bloco duplicado que tinha "// ... callbacks existentes ..." inválido
         lifecycleScope.launch {
             val perfil = SessaoManager.perfilAtual()
             val podeEditar = perfil == "admin" || perfil == "comissao"
             fab.visibility = if (podeEditar) View.VISIBLE else View.GONE
+
+            // Carrega mapa de brasões dos times
+            val times = com.example.futebolamador.repository.TimeRepository().getTodos()
+            val brasoes = times.associate { it.id to it.brasaoUri }
 
             adapter = JogoAdapter(
                 onEditar = { jogo ->
@@ -94,10 +84,11 @@ class JogosFragment : Fragment() {
                     val novo = (jogo.placarVisitante + delta).coerceAtLeast(0)
                     viewModel.atualizar(jogo.copy(placarVisitante = novo))
                 },
-                podeEditar = podeEditar
+                podeEditar = podeEditar,
+                brasoes = brasoes
             )
 
-            view.findViewById<RecyclerView>(R.id.recyclerJogos).apply {
+            recycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = this@JogosFragment.adapter
             }
@@ -134,22 +125,30 @@ class JogosFragment : Fragment() {
     private fun horaAtual(): String =
         SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
 
-    private fun horaParaMinutos(hora: String): Int {
+    // CORRIGIDO: calcula minutos usando timestamp real em vez de subtração de strings,
+    // evitando erro na virada da meia-noite
+    private fun minutosDesdeInicio(horarioInicio: String): Int {
+        if (horarioInicio.isEmpty()) return 0
         return try {
-            val partes = hora.split(":")
-            partes[0].toInt() * 60 + partes[1].toInt()
+            val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val inicio = sdf.parse(horarioInicio) ?: return 0
+            val agora = sdf.parse(horaAtual()) ?: return 0
+            var diff = ((agora.time - inicio.time) / 60000).toInt()
+            // Corrige virada de meia-noite (ex: início 23:50, agora 00:10)
+            if (diff < 0) diff += 24 * 60
+            diff
         } catch (e: Exception) { 0 }
     }
 
-    private fun minutosDesdeInicio(horarioInicio: String): Int {
-        if (horarioInicio.isEmpty()) return 0
-        return horaParaMinutos(horaAtual()) - horaParaMinutos(horarioInicio)
-    }
-
     private fun tratarIniciar(jogo: JogoEntity) {
-        val agora = horaParaMinutos(horaAtual())
-        val agendado = horaParaMinutos(jogo.hora)
-        if (agora < agendado) {
+        val minutos = minutosDesdeInicio(jogo.hora.padStart(5, '0').let { jogo.hora })
+        // Compara hora atual com hora agendada
+        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val agora = sdf.parse(horaAtual())
+        val agendado = try { sdf.parse(jogo.hora) } catch (e: Exception) { null }
+        val antesDoHorario = agora != null && agendado != null && agora.before(agendado)
+
+        if (antesDoHorario) {
             AlertDialog.Builder(requireContext())
                 .setTitle("Iniciar antes do horário")
                 .setMessage("O jogo está agendado para ${jogo.hora}. Deseja iniciar mesmo assim?")

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.futebolamador.R
 import com.example.futebolamador.data.TimeEntity
@@ -62,8 +63,17 @@ class TimeAdapter(
 
     override fun getItemCount() = times.size
 
+    // CORRIGIDO: DiffUtil para evitar redesenho total e piscar na tela
     fun atualizarLista(novaLista: List<TimeEntity>) {
+        val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize() = times.size
+            override fun getNewListSize() = novaLista.size
+            override fun areItemsTheSame(oldPos: Int, newPos: Int) =
+                times[oldPos].id == novaLista[newPos].id
+            override fun areContentsTheSame(oldPos: Int, newPos: Int) =
+                times[oldPos] == novaLista[newPos]
+        })
         times = novaLista
-        notifyDataSetChanged()
+        diff.dispatchUpdatesTo(this)
     }
 }

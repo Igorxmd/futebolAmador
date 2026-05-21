@@ -11,7 +11,9 @@ class JogoRepository {
 
     suspend fun getTodos(): List<JogoEntity> {
         return try {
-            val resultado = colecao.orderBy("data").get().await()
+            // CORRIGIDO: removido orderBy("data") pois o formato DD/MM/AAAA ordena errado
+            // A ordenação correta é feita no cliente após buscar os dados
+            val resultado = colecao.get().await()
             resultado.documents.mapNotNull { doc ->
                 JogoEntity(
                     id = doc.getString("id") ?: doc.id,
@@ -28,7 +30,11 @@ class JogoRepository {
                     horarioIntervalo = doc.getString("horarioIntervalo") ?: "",
                     horarioFim = doc.getString("horarioFim") ?: ""
                 )
-            }
+            }.sortedWith(compareBy(
+                // Ordena por data (DD/MM/AAAA) convertendo para AAAA/MM/DD para comparação correta
+                { it.data.split("/").let { p -> if (p.size == 3) "${p[2]}${p[1]}${p[0]}" else it.data } },
+                { it.hora }
+            ))
         } catch (e: Exception) { emptyList() }
     }
 

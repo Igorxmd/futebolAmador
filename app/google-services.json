@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "166125208939",
+    "project_id": "futebolamador-94e02",
+    "storage_bucket": "futebolamador-94e02.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166125208939:android:13b33a9dd320654e25382e",
+        "android_client_info": {
+          "package_name": "com.example.futebolamador"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "166125208939-6fg7c1utgduup8256alrkm4i3n3s7o22.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.futebolamador",
+            "certificate_hash": "847215bc1a141b415a8b8fdd5adf1350602e6a70"
+          }
+        },
+        {
+          "client_id": "166125208939-9gnta3d1t5vb2f1pua8e0av9fjdbstkf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjjFik2OpCJnr8hHU9AeVMHIT1nfszMVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "166125208939-9gnta3d1t5vb2f1pua8e0av9fjdbstkf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

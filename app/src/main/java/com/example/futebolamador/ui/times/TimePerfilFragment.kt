@@ -93,6 +93,7 @@ class TimePerfilFragment : Fragment() {
                 txtSemJogos.visibility = View.GONE
                 recycler.visibility = View.VISIBLE
                 recycler.layoutManager = LinearLayoutManager(requireContext())
+                // CORRIGIDO: brasoes adicionado (parâmetro obrigatório após refatoração)
                 recycler.adapter = JogoAdapter(
                     jogos = jogosDoTime,
                     onEditar = {},
@@ -102,7 +103,8 @@ class TimePerfilFragment : Fragment() {
                     onFinalizar = {},
                     onGolMandante = { _, _ -> },
                     onGolVisitante = { _, _ -> },
-                    podeEditar = false
+                    podeEditar = false,
+                    brasoes = emptyMap()
                 )
             }
         }

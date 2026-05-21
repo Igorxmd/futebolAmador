@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.futebolamador.R
@@ -20,7 +21,38 @@ import com.google.firebase.firestore.FirebaseFirestore
 class LoginFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
-    private val RC_SIGN_IN = 9001
+
+    // CORRIGIDO: substituído startActivityForResult (deprecated) por ActivityResultLauncher
+    private val googleSignInLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        try {
+            val account = task.getResult(ApiException::class.java)
+            val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+            auth.signInWithCredential(credential)
+                .addOnSuccessListener { authResult ->
+                    val user = authResult.user!!
+                    val db = FirebaseFirestore.getInstance()
+                    val ref = db.collection("usuarios").document(user.uid)
+                    ref.get().addOnSuccessListener { doc ->
+                        if (!doc.exists()) {
+                            ref.set(mapOf(
+                                "nome" to (user.displayName ?: ""),
+                                "email" to (user.email ?: ""),
+                                "perfil" to "torcedor"
+                            ))
+                        }
+                        findNavController().navigate(R.id.action_loginFragment_to_timesFragment)
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(requireContext(), "Erro ao entrar com Google", Toast.LENGTH_SHORT).show()
+                }
+        } catch (e: ApiException) {
+            Toast.makeText(requireContext(), "Erro: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +65,6 @@ class LoginFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
-        // Se já está logado, vai direto para os times
         if (auth.currentUser != null) {
             findNavController().navigate(R.id.action_loginFragment_to_timesFragment)
             return
@@ -66,43 +97,11 @@ class LoginFragment : Fragment() {
                 .requestEmail()
                 .build()
             val client = GoogleSignIn.getClient(requireActivity(), gso)
-            startActivityForResult(client.signInIntent, RC_SIGN_IN)
+            googleSignInLauncher.launch(client.signInIntent)
         }
 
         view.findViewById<Button>(R.id.btnCadastrar).setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_cadastroFragment)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: android.content.Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                auth.signInWithCredential(credential)
-                    .addOnSuccessListener { result ->
-                        val user = result.user!!
-                        val db = FirebaseFirestore.getInstance()
-                        val ref = db.collection("usuarios").document(user.uid)
-                        ref.get().addOnSuccessListener { doc ->
-                            if (!doc.exists()) {
-                                ref.set(mapOf(
-                                    "nome" to (user.displayName ?: ""),
-                                    "email" to (user.email ?: ""),
-                                    "perfil" to "torcedor"
-                                ))
-                            }
-                            findNavController().navigate(R.id.action_loginFragment_to_timesFragment)
-                        }
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(requireContext(), "Erro ao entrar com Google", Toast.LENGTH_SHORT).show()
-                    }
-            } catch (e: ApiException) {
-                Toast.makeText(requireContext(), "Erro: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
         }
     }
 }

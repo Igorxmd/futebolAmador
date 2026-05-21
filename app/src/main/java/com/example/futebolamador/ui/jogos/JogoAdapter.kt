@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.futebolamador.R
 import com.example.futebolamador.data.JogoEntity
+import android.widget.ImageView
 
 class JogoAdapter(
     private var jogos: List<JogoEntity> = emptyList(),
@@ -20,7 +21,7 @@ class JogoAdapter(
     private val onFinalizar: (JogoEntity) -> Unit,
     private val onGolMandante: (JogoEntity, Int) -> Unit,
     private val onGolVisitante: (JogoEntity, Int) -> Unit,
-    private val podeEditar: Boolean = false
+    private val podeEditar: Boolean = false,
     private val brasoes: Map<String, String> = emptyMap()
 ) : RecyclerView.Adapter<JogoAdapter.JogoViewHolder>() {
 
