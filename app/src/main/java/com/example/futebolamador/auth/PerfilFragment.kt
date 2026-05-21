@@ -94,6 +94,8 @@ class PerfilFragment : Fragment() {
 
             // Mostra painel admin só para admins
             cardAdmin.visibility = if (perfil == "admin") View.VISIBLE else View.GONE
+
+            view.findViewById<TextView>(R.id.txtMeusPontos).text = dados["pontos"] ?: "0"
         }
 
         view.findViewById<Button>(R.id.btnSalvarPerfil).setOnClickListener {

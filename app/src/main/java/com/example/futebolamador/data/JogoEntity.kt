@@ -8,6 +8,7 @@ data class JogoEntity(
     val timeVisitanteNome: String = "",
     val data: String = "",
     val hora: String = "",
+    val local: String = "",
     val placarMandante: Int = 0,
     val placarVisitante: Int = 0,
     val status: String = "Agendado",

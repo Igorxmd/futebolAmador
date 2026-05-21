@@ -47,8 +47,13 @@ class JogosFragment : Fragment() {
             viewModel.carregarTodos()
         }
 
-        // CORRIGIDO: apenas UM bloco lifecycleScope com tudo junto;
-        // removido o bloco duplicado que tinha "// ... callbacks existentes ..." inválido
+        onApostar = { jogo ->
+            val bundle = Bundle()
+            bundle.putString("jogoId", jogo.id)
+            findNavController().navigate(
+                R.id.action_jogosFragment_to_apostasJogoFragment, bundle)
+        },
+
         lifecycleScope.launch {
             val perfil = SessaoManager.perfilAtual()
             val podeEditar = perfil == "admin" || perfil == "comissao"
@@ -119,6 +124,10 @@ class JogosFragment : Fragment() {
                     else -> true
                 }
             }
+            R.id.nav_ranking -> {
+            findNavController().navigate(R.id.action_global_rankingFragment)
+            true
+        }
         }
     }
 

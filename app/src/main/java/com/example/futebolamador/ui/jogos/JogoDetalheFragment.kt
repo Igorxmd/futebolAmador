@@ -16,6 +16,7 @@ import com.example.futebolamador.data.JogoEntity
 import com.example.futebolamador.data.TimeEntity
 import com.example.futebolamador.repository.TimeRepository
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 class JogoDetalheFragment : Fragment() {
@@ -25,6 +26,7 @@ class JogoDetalheFragment : Fragment() {
     private lateinit var spinnerVisitante: Spinner
     private lateinit var editData: EditText
     private lateinit var editHora: EditText
+    private lateinit var editLocal: EditText
 
     private var times: List<TimeEntity> = emptyList()
     private var jogoAtual: JogoEntity? = null
@@ -44,6 +46,7 @@ class JogoDetalheFragment : Fragment() {
         spinnerVisitante = view.findViewById(R.id.spinnerVisitante)
         editData = view.findViewById(R.id.editData)
         editHora = view.findViewById(R.id.editHora)
+        editLocal = view.findViewById(R.id.editLocal)
 
         view.findViewById<MaterialToolbar>(R.id.toolbarJogo)
             .setNavigationOnClickListener { findNavController().popBackStack() }
@@ -88,7 +91,6 @@ class JogoDetalheFragment : Fragment() {
             }
         })
 
-        // Carrega times via coroutine
         lifecycleScope.launch {
             times = TimeRepository().getTodos()
             val nomesTimes = times.map { it.nome }
@@ -98,7 +100,6 @@ class JogoDetalheFragment : Fragment() {
             spinnerMandante.adapter = adapterTimes
             spinnerVisitante.adapter = adapterTimes
 
-            // Se for edição, preenche os campos
             val jogoId = arguments?.getString("jogoId") ?: ""
             if (jogoId.isNotEmpty()) {
                 jogoAtual = viewModel.getPorIdFirestore(jogoId)
@@ -109,19 +110,20 @@ class JogoDetalheFragment : Fragment() {
                     if (indexVisitante >= 0) spinnerVisitante.setSelection(indexVisitante)
                     editData.setText(jogo.data)
                     editHora.setText(jogo.hora)
+                    editLocal.setText(jogo.local)
                 }
             }
         }
 
-        view.findViewById<Button>(R.id.btnSalvarJogo).setOnClickListener { salvar() }
+        view.findViewById<Button>(R.id.btnSalvarJogo).setOnClickListener { salvar(view) }
         view.findViewById<Button>(R.id.btnCancelarJogo).setOnClickListener {
             findNavController().popBackStack()
         }
     }
 
-    private fun salvar() {
+    private fun salvar(view: View) {
         if (times.isEmpty()) {
-            Toast.makeText(requireContext(), "Cadastre times primeiro!", Toast.LENGTH_SHORT).show()
+            Snackbar.make(view, "Cadastre times primeiro!", Snackbar.LENGTH_SHORT).show()
             return
         }
 
@@ -129,19 +131,14 @@ class JogoDetalheFragment : Fragment() {
         val visitante = times[spinnerVisitante.selectedItemPosition]
         val data = editData.text.toString().trim()
         val hora = editHora.text.toString().trim()
+        val local = editLocal.text.toString().trim()
 
         if (mandante.id == visitante.id) {
-            Toast.makeText(requireContext(), "Escolha times diferentes!", Toast.LENGTH_SHORT).show()
+            Snackbar.make(view, "Escolha times diferentes!", Snackbar.LENGTH_SHORT).show()
             return
         }
-        if (data.length < 10) {
-            editData.error = "Informe a data completa"
-            return
-        }
-        if (hora.length < 5) {
-            editHora.error = "Informe a hora completa"
-            return
-        }
+        if (data.length < 10) { editData.error = "Informe a data completa"; return }
+        if (hora.length < 5) { editHora.error = "Informe a hora completa"; return }
 
         val jogo = JogoEntity(
             id = jogoAtual?.id ?: "",
@@ -150,7 +147,8 @@ class JogoDetalheFragment : Fragment() {
             timeMandanteNome = mandante.nome,
             timeVisitanteNome = visitante.nome,
             data = data,
-            hora = hora.ifEmpty { "00:00" },
+            hora = hora,
+            local = local,
             placarMandante = jogoAtual?.placarMandante ?: 0,
             placarVisitante = jogoAtual?.placarVisitante ?: 0,
             status = jogoAtual?.status ?: "Agendado",
@@ -161,10 +159,10 @@ class JogoDetalheFragment : Fragment() {
 
         if (jogoAtual != null) {
             viewModel.atualizar(jogo)
-            Toast.makeText(requireContext(), "Jogo atualizado!", Toast.LENGTH_SHORT).show()
+            Snackbar.make(view, "Jogo atualizado!", Snackbar.LENGTH_SHORT).show()
         } else {
             viewModel.inserir(jogo)
-            Toast.makeText(requireContext(), "Jogo agendado!", Toast.LENGTH_SHORT).show()
+            Snackbar.make(view, "Jogo agendado!", Snackbar.LENGTH_SHORT).show()
         }
         findNavController().popBackStack()
     }

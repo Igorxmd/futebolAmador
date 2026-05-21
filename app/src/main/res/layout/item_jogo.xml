@@ -238,6 +238,17 @@
             android:orientation="horizontal"
             android:gravity="end">
 
+            <Button
+                android:id="@+id/btnApostar"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="🎯 Apostar"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#0D47A1"
+                android:layout_marginEnd="8dp"/>
+
             <ImageButton
                 android:id="@+id/btnEditarJogo"
                 android:layout_width="36dp"

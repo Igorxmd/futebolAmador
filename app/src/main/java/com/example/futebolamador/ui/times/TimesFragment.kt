@@ -117,8 +117,13 @@ class TimesFragment : Fragment() {
                         true
                     }
                     else -> true
+
                 }
             }
+            R.id.nav_ranking -> {
+            findNavController().navigate(R.id.action_global_rankingFragment)
+            true
+        }
         }
     }
 

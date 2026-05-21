@@ -11,32 +11,34 @@ class JogoRepository {
 
     suspend fun getTodos(): List<JogoEntity> {
         return try {
-            // CORRIGIDO: removido orderBy("data") pois o formato DD/MM/AAAA ordena errado
-            // A ordenação correta é feita no cliente após buscar os dados
-            val resultado = colecao.get().await()
-            resultado.documents.mapNotNull { doc ->
-                JogoEntity(
-                    id = doc.getString("id") ?: doc.id,
-                    timeMandanteId = doc.getString("timeMandanteId") ?: "",
-                    timeVisitanteId = doc.getString("timeVisitanteId") ?: "",
-                    timeMandanteNome = doc.getString("timeMandanteNome") ?: "",
-                    timeVisitanteNome = doc.getString("timeVisitanteNome") ?: "",
-                    data = doc.getString("data") ?: "",
-                    hora = doc.getString("hora") ?: "",
-                    placarMandante = (doc.getLong("placarMandante") ?: 0).toInt(),
-                    placarVisitante = (doc.getLong("placarVisitante") ?: 0).toInt(),
-                    status = doc.getString("status") ?: "Agendado",
-                    horarioInicio = doc.getString("horarioInicio") ?: "",
-                    horarioIntervalo = doc.getString("horarioIntervalo") ?: "",
-                    horarioFim = doc.getString("horarioFim") ?: ""
-                )
-            }.sortedWith(compareBy(
-                // Ordena por data (DD/MM/AAAA) convertendo para AAAA/MM/DD para comparação correta
-                { it.data.split("/").let { p -> if (p.size == 3) "${p[2]}${p[1]}${p[0]}" else it.data } },
-                { it.hora }
-            ))
+            val resultado = colecao.orderBy("data").get().await()
+            resultado.documents.mapNotNull { doc -> docParaJogo(doc) }
         } catch (e: Exception) { emptyList() }
     }
+
+    suspend fun getPorId(id: String): JogoEntity? {
+        return try {
+            val doc = colecao.document(id).get().await()
+            if (doc.exists()) docParaJogo(doc) else null
+        } catch (e: Exception) { null }
+    }
+
+    private fun docParaJogo(doc: com.google.firebase.firestore.DocumentSnapshot) = JogoEntity(
+        id = doc.getString("id") ?: doc.id,
+        timeMandanteId = doc.getString("timeMandanteId") ?: "",
+        timeVisitanteId = doc.getString("timeVisitanteId") ?: "",
+        timeMandanteNome = doc.getString("timeMandanteNome") ?: "",
+        timeVisitanteNome = doc.getString("timeVisitanteNome") ?: "",
+        data = doc.getString("data") ?: "",
+        hora = doc.getString("hora") ?: "",
+        local = doc.getString("local") ?: "",
+        placarMandante = (doc.getLong("placarMandante") ?: 0).toInt(),
+        placarVisitante = (doc.getLong("placarVisitante") ?: 0).toInt(),
+        status = doc.getString("status") ?: "Agendado",
+        horarioInicio = doc.getString("horarioInicio") ?: "",
+        horarioIntervalo = doc.getString("horarioIntervalo") ?: "",
+        horarioFim = doc.getString("horarioFim") ?: ""
+    )
 
     suspend fun inserir(jogo: JogoEntity): String {
         val ref = colecao.document()
@@ -60,6 +62,7 @@ class JogoRepository {
         "timeVisitanteNome" to jogo.timeVisitanteNome,
         "data" to jogo.data,
         "hora" to jogo.hora,
+        "local" to jogo.local,
         "placarMandante" to jogo.placarMandante,
         "placarVisitante" to jogo.placarVisitante,
         "status" to jogo.status,
@@ -67,26 +70,12 @@ class JogoRepository {
         "horarioIntervalo" to jogo.horarioIntervalo,
         "horarioFim" to jogo.horarioFim
     )
-    suspend fun getPorId(id: String): JogoEntity? {
-        return try {
-            val doc = colecao.document(id).get().await()
-            if (doc.exists()) {
-                JogoEntity(
-                    id = doc.getString("id") ?: doc.id,
-                    timeMandanteId = doc.getString("timeMandanteId") ?: "",
-                    timeVisitanteId = doc.getString("timeVisitanteId") ?: "",
-                    timeMandanteNome = doc.getString("timeMandanteNome") ?: "",
-                    timeVisitanteNome = doc.getString("timeVisitanteNome") ?: "",
-                    data = doc.getString("data") ?: "",
-                    hora = doc.getString("hora") ?: "",
-                    placarMandante = (doc.getLong("placarMandante") ?: 0).toInt(),
-                    placarVisitante = (doc.getLong("placarVisitante") ?: 0).toInt(),
-                    status = doc.getString("status") ?: "Agendado",
-                    horarioInicio = doc.getString("horarioInicio") ?: "",
-                    horarioIntervalo = doc.getString("horarioIntervalo") ?: "",
-                    horarioFim = doc.getString("horarioFim") ?: ""
-                )
-            } else null
-        } catch (e: Exception) { null }
+
+    fun calcularResultado(placarMandante: Int, placarVisitante: Int): String {
+        return when {
+            placarMandante > placarVisitante -> "mandante"
+            placarMandante < placarVisitante -> "visitante"
+            else -> "empate"
+        }
     }
 }

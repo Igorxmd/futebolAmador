@@ -22,7 +22,8 @@ class JogoAdapter(
     private val onGolMandante: (JogoEntity, Int) -> Unit,
     private val onGolVisitante: (JogoEntity, Int) -> Unit,
     private val podeEditar: Boolean = false,
-    private val brasoes: Map<String, String> = emptyMap()
+    private val brasoes: Map<String, String> = emptyMap(),
+    private val onApostar: (JogoEntity) -> Unit,
 ) : RecyclerView.Adapter<JogoAdapter.JogoViewHolder>() {
 
     inner class JogoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -132,6 +133,13 @@ class JogoAdapter(
         holder.btnMenosVisitante.setOnClickListener { onGolVisitante(jogo, -1) }
         holder.btnEditar.setOnClickListener { onEditar(jogo) }
         holder.btnDeletar.setOnClickListener { onDeletar(jogo) }
+
+        holder.itemView.findViewById<Button>(R.id.btnApostar)
+            .setOnClickListener { onApostar(jogo) }
+
+// Só mostra botão de apostar para jogos Agendados ou Concluídos
+        holder.itemView.findViewById<Button>(R.id.btnApostar).visibility =
+            if (jogo.status in listOf("Agendado", "Concluído")) View.VISIBLE else View.GONE
     }
 
     override fun getItemCount() = jogos.size

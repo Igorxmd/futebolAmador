@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F5F5F5">
+    android:background="#1A3A1A">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -14,11 +14,10 @@
             android:id="@+id/toolbarJogo"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="#0D2B0D"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationContentDescription="Voltar"
             app:title="Agendar Jogo"
-            app:titleTextColor="#FFFFFF" />
+            app:titleTextColor="#FFFFFF"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
@@ -35,7 +34,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#1E4620">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -49,45 +49,52 @@
                         android:text="Dados do Jogo"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#212121"
-                        android:layout_marginBottom="16dp" />
+                        android:textColor="#FFFFFF"
+                        android:layout_marginBottom="16dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Time Mandante"
-                        android:textColor="#757575"
+                        android:textColor="#B0BEC5"
                         android:textSize="13sp"/>
                     <Spinner
                         android:id="@+id/spinnerMandante"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"/>
+                        android:layout_marginBottom="12dp"
+                        android:backgroundTint="#FFFFFF"
+                        android:popupBackground="#1E4620"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Time Visitante"
-                        android:textColor="#757575"
+                        android:textColor="#B0BEC5"
                         android:textSize="13sp"/>
                     <Spinner
                         android:id="@+id/spinnerVisitante"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"/>
+                        android:layout_marginBottom="12dp"
+                        android:backgroundTint="#FFFFFF"
+                        android:popupBackground="#1E4620"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Data (DD/MM/AAAA)"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_marginBottom="12dp">
+                        android:layout_marginBottom="12dp"
+                        app:boxStrokeColor="#4CAF50"
+                        app:hintTextColor="#B0BEC5">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editData"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
-                            android:maxLength="10"/>
+                            android:maxLength="10"
+                            android:textColor="#FFFFFF"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -95,13 +102,32 @@
                         android:layout_height="wrap_content"
                         android:hint="Hora (HH:MM)"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_marginBottom="12dp">
+                        android:layout_marginBottom="12dp"
+                        app:boxStrokeColor="#4CAF50"
+                        app:hintTextColor="#B0BEC5">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editHora"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
-                            android:maxLength="5"/>
+                            android:maxLength="5"
+                            android:textColor="#FFFFFF"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nome do Campo / Local"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_marginBottom="8dp"
+                        app:boxStrokeColor="#4CAF50"
+                        app:hintTextColor="#B0BEC5">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editLocal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapWords"
+                            android:textColor="#FFFFFF"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -119,8 +145,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Cancelar"
+                    android:textColor="#FFFFFF"
                     android:layout_marginEnd="8dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
                 <Button
                     android:id="@+id/btnSalvarJogo"
@@ -128,11 +155,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Salvar"
-                    android:layout_marginStart="8dp" />
+                    android:backgroundTint="#2E7D32"
+                    android:layout_marginStart="8dp"/>
 
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>
