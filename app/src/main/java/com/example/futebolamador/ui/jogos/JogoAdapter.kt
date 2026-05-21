@@ -1,16 +1,18 @@
 package com.example.futebolamador.ui.jogos
 
 import android.graphics.Color
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.futebolamador.R
 import com.example.futebolamador.data.JogoEntity
-import android.widget.ImageView
 
 class JogoAdapter(
     private var jogos: List<JogoEntity> = emptyList(),
@@ -32,6 +34,8 @@ class JogoAdapter(
         val txtPlacar: TextView = view.findViewById(R.id.txtPlacar)
         val txtData: TextView = view.findViewById(R.id.txtData)
         val txtStatus: TextView = view.findViewById(R.id.txtStatus)
+        val imgMandante: ImageView = view.findViewById(R.id.imgMandante)
+        val imgVisitante: ImageView = view.findViewById(R.id.imgVisitante)
         val btnIniciar: Button = view.findViewById(R.id.btnIniciar)
         val layoutBotoesControle: View = view.findViewById(R.id.layoutBotoesControle)
         val btnIntervalo: Button = view.findViewById(R.id.btnIntervalo)
@@ -43,6 +47,7 @@ class JogoAdapter(
         val btnMenosVisitante: Button = view.findViewById(R.id.btnMenosVisitante)
         val btnEditar: ImageButton = view.findViewById(R.id.btnEditarJogo)
         val btnDeletar: ImageButton = view.findViewById(R.id.btnDeletarJogo)
+        val btnApostar: Button = view.findViewById(R.id.btnApostar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JogoViewHolder {
@@ -58,27 +63,27 @@ class JogoAdapter(
         holder.txtVisitante.text = jogo.timeVisitanteNome
         holder.txtData.text = "${jogo.data} ${jogo.hora}"
 
-        // Oculta editar/deletar para torcedores
         holder.btnEditar.visibility = if (podeEditar) View.VISIBLE else View.GONE
         holder.btnDeletar.visibility = if (podeEditar) View.VISIBLE else View.GONE
 
-        // Carrega brasão mandante
         val brasaoMandante = brasoes[jogo.timeMandanteId]
         if (!brasaoMandante.isNullOrEmpty()) {
-            try {
-                holder.itemView.findViewById<ImageView>(R.id.imgMandante)
-                    .setImageURI(android.net.Uri.parse(brasaoMandante))
-            } catch (e: Exception) {}
+            try { holder.imgMandante.setImageURI(Uri.parse(brasaoMandante)) }
+            catch (e: Exception) { holder.imgMandante.setImageResource(android.R.drawable.ic_menu_myplaces) }
+        } else {
+            holder.imgMandante.setImageResource(android.R.drawable.ic_menu_myplaces)
         }
 
-// Carrega brasão visitante
         val brasaoVisitante = brasoes[jogo.timeVisitanteId]
         if (!brasaoVisitante.isNullOrEmpty()) {
-            try {
-                holder.itemView.findViewById<ImageView>(R.id.imgVisitante)
-                    .setImageURI(android.net.Uri.parse(brasaoVisitante))
-            } catch (e: Exception) {}
+            try { holder.imgVisitante.setImageURI(Uri.parse(brasaoVisitante)) }
+            catch (e: Exception) { holder.imgVisitante.setImageResource(android.R.drawable.ic_menu_myplaces) }
+        } else {
+            holder.imgVisitante.setImageResource(android.R.drawable.ic_menu_myplaces)
         }
+
+        // Reset do texto do botão (RecyclerView reutiliza views)
+        holder.btnIntervalo.text = "Intervalo"
 
         when (jogo.status) {
             "Agendado" -> {
@@ -133,19 +138,24 @@ class JogoAdapter(
         holder.btnMenosVisitante.setOnClickListener { onGolVisitante(jogo, -1) }
         holder.btnEditar.setOnClickListener { onEditar(jogo) }
         holder.btnDeletar.setOnClickListener { onDeletar(jogo) }
+        holder.btnApostar.setOnClickListener { onApostar(jogo) }
 
-        holder.itemView.findViewById<Button>(R.id.btnApostar)
-            .setOnClickListener { onApostar(jogo) }
-
-// Só mostra botão de apostar para jogos Agendados ou Concluídos
-        holder.itemView.findViewById<Button>(R.id.btnApostar).visibility =
+        holder.btnApostar.visibility =
             if (jogo.status in listOf("Agendado", "Concluído")) View.VISIBLE else View.GONE
     }
 
     override fun getItemCount() = jogos.size
 
     fun atualizarLista(novaLista: List<JogoEntity>) {
+        val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize() = jogos.size
+            override fun getNewListSize() = novaLista.size
+            override fun areItemsTheSame(oldPos: Int, newPos: Int) =
+                jogos[oldPos].id == novaLista[newPos].id
+            override fun areContentsTheSame(oldPos: Int, newPos: Int) =
+                jogos[oldPos] == novaLista[newPos]
+        })
         jogos = novaLista
-        notifyDataSetChanged()
+        diff.dispatchUpdatesTo(this)
     }
 }

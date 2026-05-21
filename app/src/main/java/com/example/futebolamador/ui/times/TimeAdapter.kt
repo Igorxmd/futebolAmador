@@ -21,12 +21,12 @@ class TimeAdapter(
 ) : RecyclerView.Adapter<TimeAdapter.TimeViewHolder>() {
 
     inner class TimeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imgBrasao: ImageView = view.findViewById(R.id.imgBrasao)
-        val nomeText: TextView = view.findViewById(R.id.txtNome)
-        val cidadeText: TextView = view.findViewById(R.id.txtCidade)
+        val imgBrasao: ImageView   = view.findViewById(R.id.imgBrasao)
+        val nomeText: TextView     = view.findViewById(R.id.txtNome)
+        val cidadeText: TextView   = view.findViewById(R.id.txtCidade)
         val fundacaoText: TextView = view.findViewById(R.id.txtFundacao)
         val btnEditar: ImageButton = view.findViewById(R.id.btnEditar)
-        val btnDeletar: ImageButton = view.findViewById(R.id.btnDeletar)
+        val btnDeletar: ImageButton= view.findViewById(R.id.btnDeletar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeViewHolder {
@@ -37,25 +37,21 @@ class TimeAdapter(
 
     override fun onBindViewHolder(holder: TimeViewHolder, position: Int) {
         val time = times[position]
-        holder.nomeText.text = time.nome
-        holder.cidadeText.text = time.cidade
+        holder.nomeText.text     = time.nome
+        holder.cidadeText.text   = time.cidade
         holder.fundacaoText.text = if (time.dataFundacao.isNotEmpty())
             "Fundado em: ${time.dataFundacao}" else ""
 
         if (time.brasaoUri.isNotEmpty()) {
-            try {
-                holder.imgBrasao.setImageURI(Uri.parse(time.brasaoUri))
-            } catch (e: Exception) {
-                holder.imgBrasao.setImageResource(android.R.drawable.ic_menu_gallery)
-            }
+            try { holder.imgBrasao.setImageURI(Uri.parse(time.brasaoUri)) }
+            catch (e: Exception) { holder.imgBrasao.setImageResource(android.R.drawable.ic_menu_gallery) }
         } else {
             holder.imgBrasao.setImageResource(android.R.drawable.ic_menu_gallery)
         }
 
-        holder.btnEditar.visibility = if (podeEditar) View.VISIBLE else View.GONE
+        holder.btnEditar.visibility  = if (podeEditar) View.VISIBLE else View.GONE
         holder.btnDeletar.visibility = if (podeEditar) View.VISIBLE else View.GONE
 
-        // Clique no card inteiro abre o perfil
         holder.itemView.setOnClickListener { onClicar(time) }
         holder.btnEditar.setOnClickListener { onEditar(time) }
         holder.btnDeletar.setOnClickListener { onDeletar(time) }
@@ -63,7 +59,6 @@ class TimeAdapter(
 
     override fun getItemCount() = times.size
 
-    // CORRIGIDO: DiffUtil para evitar redesenho total e piscar na tela
     fun atualizarLista(novaLista: List<TimeEntity>) {
         val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize() = times.size

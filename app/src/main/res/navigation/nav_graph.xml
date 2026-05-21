@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
     app:startDestination="@id/splashFragment">
+    <action
+        android:id="@+id/action_global_rankingFragment"
+        app:destination="@id/rankingFragment" />
 
     <fragment
         android:id="@+id/splashFragment"

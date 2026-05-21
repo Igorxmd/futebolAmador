@@ -11,8 +11,13 @@ class JogoRepository {
 
     suspend fun getTodos(): List<JogoEntity> {
         return try {
-            val resultado = colecao.orderBy("data").get().await()
+            // orderBy("data") com DD/MM/AAAA ordena errado — ordenação feita no cliente
+            val resultado = colecao.get().await()
             resultado.documents.mapNotNull { doc -> docParaJogo(doc) }
+                .sortedWith(compareBy(
+                    { it.data.split("/").let { p -> if (p.size == 3) "${p[2]}${p[1]}${p[0]}" else it.data } },
+                    { it.hora }
+                ))
         } catch (e: Exception) { emptyList() }
     }
 
@@ -25,19 +30,19 @@ class JogoRepository {
 
     private fun docParaJogo(doc: com.google.firebase.firestore.DocumentSnapshot) = JogoEntity(
         id = doc.getString("id") ?: doc.id,
-        timeMandanteId = doc.getString("timeMandanteId") ?: "",
-        timeVisitanteId = doc.getString("timeVisitanteId") ?: "",
+        timeMandanteId   = doc.getString("timeMandanteId") ?: "",
+        timeVisitanteId  = doc.getString("timeVisitanteId") ?: "",
         timeMandanteNome = doc.getString("timeMandanteNome") ?: "",
-        timeVisitanteNome = doc.getString("timeVisitanteNome") ?: "",
-        data = doc.getString("data") ?: "",
-        hora = doc.getString("hora") ?: "",
-        local = doc.getString("local") ?: "",
-        placarMandante = (doc.getLong("placarMandante") ?: 0).toInt(),
-        placarVisitante = (doc.getLong("placarVisitante") ?: 0).toInt(),
-        status = doc.getString("status") ?: "Agendado",
-        horarioInicio = doc.getString("horarioInicio") ?: "",
+        timeVisitanteNome= doc.getString("timeVisitanteNome") ?: "",
+        data             = doc.getString("data") ?: "",
+        hora             = doc.getString("hora") ?: "",
+        local            = doc.getString("local") ?: "",
+        placarMandante   = (doc.getLong("placarMandante") ?: 0).toInt(),
+        placarVisitante  = (doc.getLong("placarVisitante") ?: 0).toInt(),
+        status           = doc.getString("status") ?: "Agendado",
+        horarioInicio    = doc.getString("horarioInicio") ?: "",
         horarioIntervalo = doc.getString("horarioIntervalo") ?: "",
-        horarioFim = doc.getString("horarioFim") ?: ""
+        horarioFim       = doc.getString("horarioFim") ?: ""
     )
 
     suspend fun inserir(jogo: JogoEntity): String {
@@ -55,20 +60,20 @@ class JogoRepository {
     }
 
     private fun jogoParaMapa(jogo: JogoEntity) = mapOf(
-        "id" to jogo.id,
-        "timeMandanteId" to jogo.timeMandanteId,
-        "timeVisitanteId" to jogo.timeVisitanteId,
+        "id"               to jogo.id,
+        "timeMandanteId"   to jogo.timeMandanteId,
+        "timeVisitanteId"  to jogo.timeVisitanteId,
         "timeMandanteNome" to jogo.timeMandanteNome,
         "timeVisitanteNome" to jogo.timeVisitanteNome,
-        "data" to jogo.data,
-        "hora" to jogo.hora,
-        "local" to jogo.local,
-        "placarMandante" to jogo.placarMandante,
-        "placarVisitante" to jogo.placarVisitante,
-        "status" to jogo.status,
-        "horarioInicio" to jogo.horarioInicio,
+        "data"             to jogo.data,
+        "hora"             to jogo.hora,
+        "local"            to jogo.local,
+        "placarMandante"   to jogo.placarMandante,
+        "placarVisitante"  to jogo.placarVisitante,
+        "status"           to jogo.status,
+        "horarioInicio"    to jogo.horarioInicio,
         "horarioIntervalo" to jogo.horarioIntervalo,
-        "horarioFim" to jogo.horarioFim
+        "horarioFim"       to jogo.horarioFim
     )
 
     fun calcularResultado(placarMandante: Int, placarVisitante: Int): String {

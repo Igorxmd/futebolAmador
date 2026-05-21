@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- CORRIGIDO: LinearLayout substituído por CoordinatorLayout para o FAB flutuar corretamente
-     acima da BottomNavigationView, sem sair da tela -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -88,7 +86,6 @@
 
     </LinearLayout>
 
-    <!-- CORRIGIDO: FAB agora dentro do CoordinatorLayout com layout_gravity correto -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdicionarJogo"
         android:layout_width="wrap_content"

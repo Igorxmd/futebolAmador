@@ -22,24 +22,23 @@ class LoginFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
 
-    // CORRIGIDO: substituído startActivityForResult (deprecated) por ActivityResultLauncher
     private val googleSignInLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
         try {
-            val account = task.getResult(ApiException::class.java)
+            val account    = task.getResult(ApiException::class.java)
             val credential = GoogleAuthProvider.getCredential(account.idToken, null)
             auth.signInWithCredential(credential)
                 .addOnSuccessListener { authResult ->
                     val user = authResult.user!!
-                    val db = FirebaseFirestore.getInstance()
-                    val ref = db.collection("usuarios").document(user.uid)
+                    val db   = FirebaseFirestore.getInstance()
+                    val ref  = db.collection("usuarios").document(user.uid)
                     ref.get().addOnSuccessListener { doc ->
                         if (!doc.exists()) {
                             ref.set(mapOf(
-                                "nome" to (user.displayName ?: ""),
-                                "email" to (user.email ?: ""),
+                                "nome"   to (user.displayName ?: ""),
+                                "email"  to (user.email ?: ""),
                                 "perfil" to "torcedor"
                             ))
                         }
@@ -55,9 +54,7 @@ class LoginFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_login, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,12 +73,10 @@ class LoginFragment : Fragment() {
         view.findViewById<Button>(R.id.btnEntrar).setOnClickListener {
             val email = editEmail.text.toString().trim()
             val senha = editSenha.text.toString().trim()
-
             if (email.isEmpty() || senha.isEmpty()) {
                 Toast.makeText(requireContext(), "Preencha todos os campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
             auth.signInWithEmailAndPassword(email, senha)
                 .addOnSuccessListener {
                     findNavController().navigate(R.id.action_loginFragment_to_timesFragment)
