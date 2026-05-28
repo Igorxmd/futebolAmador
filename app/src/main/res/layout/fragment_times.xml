@@ -78,10 +78,9 @@
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        app:itemIconTint="#1A3A1A"
-        app:itemTextColor="#1A3A1A"
-        app:itemActiveIndicatorColor="#E8F5E9"
+        android:background="#0D2B0D"
+        app:itemIconTint="#FFFFFF"
+        app:itemTextColor="#FFFFFF"
         app:menu="@menu/bottom_nav_menu"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

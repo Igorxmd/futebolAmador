@@ -79,7 +79,7 @@
             android:id="@+id/bottomNavJogos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#0D47A1"
+            android:background="#0D2B0D"
             app:itemIconTint="#FFFFFF"
             app:itemTextColor="#FFFFFF"
             app:menu="@menu/bottom_nav_menu"/>

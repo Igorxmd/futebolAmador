@@ -10,8 +10,7 @@
     <ImageView
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@android:drawable/ic_menu_myplaces"
-        android:tint="#FFFFFF"
+        android:src="@drawable/ic_bola_futebol"
         android:layout_marginBottom="24dp"
         android:contentDescription="Logo"/>
 
