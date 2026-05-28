@@ -13,8 +13,9 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@android:drawable/ic_menu_myplaces"
+        app:tint="#FFFFFF"
         android:layout_marginBottom="16dp"
-        android:contentDescription="Logo" />
+        android:contentDescription="Logo"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,20 +23,27 @@
         android:text="Futebol Amador"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="#212121"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gerencie times e jogos"
+        android:textSize="13sp"
+        android:textColor="#A5D6A7"
         android:layout_marginBottom="32dp"/>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="12dp"
-        app:cardElevation="4dp">
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="#FFFFFF">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"
-            android:backgroundTint="#FFFFFF"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -45,12 +53,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:hint="E-mail">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:textColor="#212121"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -60,12 +68,12 @@
                 android:layout_marginBottom="16dp"
                 android:hint="Senha"
                 app:passwordToggleEnabled="true">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editSenha"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:textColor="#212121"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -73,7 +81,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Entrar" />
+                android:backgroundTint="#2E7D32"
+                android:text="Entrar"
+                android:textColor="#FFFFFF"/>
 
             <Button
                 android:id="@+id/btnGoogleSignIn"
@@ -81,14 +91,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Entrar com Google" />
+                android:text="Entrar com Google"
+                android:textColor="#1A3A1A"
+                app:strokeColor="#2E7D32"/>
 
             <Button
                 android:id="@+id/btnCadastrar"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Criar conta" />
+                android:text="Criar conta"
+                android:textColor="#2E7D32"/>
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

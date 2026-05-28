@@ -109,22 +109,17 @@ class TimesFragment : Fragment() {
         }
 
         view.findViewById<BottomNavigationView>(R.id.bottomNav).apply {
-
             selectedItemId = R.id.nav_times
-
             setOnItemSelectedListener { item ->
                 when (item.itemId) {
-
                     R.id.nav_jogos -> {
                         findNavController().navigate(R.id.action_timesFragment_to_jogosFragment)
                         true
                     }
-
                     R.id.nav_ranking -> {
-                        findNavController().navigate(R.id.rankingFragment)
+                        findNavController().navigate(R.id.action_timesFragment_to_rankingFragment)
                         true
                     }
-
                     else -> true
                 }
             }

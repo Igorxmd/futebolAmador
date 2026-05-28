@@ -60,6 +60,7 @@
 
             <!-- Dados -->
             <com.google.android.material.card.MaterialCardView
+                app:cardBackgroundColor="#FFFFFF"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="12dp"
@@ -157,6 +158,7 @@
 
             <!-- Solicitar conta técnica -->
             <com.google.android.material.card.MaterialCardView
+                app:cardBackgroundColor="#FFFFFF"
                 android:id="@+id/cardSolicitacao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -200,6 +202,7 @@
 
             <!-- Painel Admin -->
             <com.google.android.material.card.MaterialCardView
+                app:cardBackgroundColor="#FFFFFF"
                 android:id="@+id/cardAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

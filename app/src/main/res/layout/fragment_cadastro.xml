@@ -10,22 +10,20 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbarCadastro"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:backgroundTint="#091D90"
+            android:background="#0D2B0D"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:title="Criar Conta"
-            app:titleTextColor="#FFFFFF" />
+            app:titleTextColor="#FFFFFF"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#067E0B">
+        android:background="#1A3A1A">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,14 +35,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#EAEDEA"
                     android:orientation="vertical"
                     android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Criar Conta"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#1A3A1A"
+                        android:layout_marginBottom="16dp"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -52,12 +59,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:hint="Nome completo">
-
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editNome"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPersonName" />
+                            android:inputType="textPersonName"
+                            android:textColor="#212121"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -66,12 +73,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:hint="E-mail">
-
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textEmailAddress" />
+                            android:inputType="textEmailAddress"
+                            android:textColor="#212121"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -81,12 +88,12 @@
                         android:layout_marginBottom="12dp"
                         android:hint="Senha"
                         app:passwordToggleEnabled="true">
-
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editSenha"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPassword" />
+                            android:inputType="textPassword"
+                            android:textColor="#212121"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -96,22 +103,21 @@
                         android:layout_marginBottom="16dp"
                         android:hint="Confirmar senha"
                         app:passwordToggleEnabled="true">
-
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editConfirmarSenha"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPassword" />
+                            android:inputType="textPassword"
+                            android:textColor="#212121"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button
                         android:id="@+id/btnCriarConta"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="#091D90"
-                        android:foregroundTint="#055008"
+                        android:backgroundTint="#2E7D32"
                         android:text="Criar Conta"
-                        android:textColorLink="#165F19" />
+                        android:textColor="#FFFFFF"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
